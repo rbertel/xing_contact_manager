@@ -1,4 +1,7 @@
 <?php
+
+    // NUR EINE TESTDATEI
+    
     include_once("Model_Home.php");
      echo "HALO";
     $model = new Model_Home();
