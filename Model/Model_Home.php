@@ -18,8 +18,8 @@
                         
             $this->db_host        = "localhost";
             $this->db_db          = "xing_contacts";
-            $this->db_username    = "root";
-            $this->db_password    = "banane030";
+            $this->db_username    = "xxx";
+            $this->db_password    = "xxx";
             
             // $database = new PDO("mysql:host=" . db_host . ";dbname=" . db_db, db_username, db_password);
             // $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
