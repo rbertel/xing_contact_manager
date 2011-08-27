@@ -1,5 +1,7 @@
 <?php
-
+    
+    // EINE TESTDATEI
+    
     class Zugriffe {
         
             // some variables   
