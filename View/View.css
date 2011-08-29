@@ -1,3 +1,4 @@
-table.mytable { font-size: 12; border: 2px solid; border-color: black}
-td.mytd {}
-th.myth {background: #D2D2D0}
+table.mytable { font-size: 12; border: 1px solid; border-color: black}
+td.default{background: #D2D2D0}
+th.default {background: #D2D2D0}
+input.editButton {font-size:0px; height:25px; width:100%;}

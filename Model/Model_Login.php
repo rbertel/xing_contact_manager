@@ -20,8 +20,8 @@
             
             $this->db_host        = "localhost";
             $this->db_db          = "xing_contacts";
-            $this->db_username    = "xxx";
-            $this->db_password    = "xxx";
+            $this->db_username    = "root";
+            $this->db_password    = "banane030";
             mysql_connect($this->db_host, $this->db_username, $this->db_password);
             mysql_selectdb($this->db_db);
             

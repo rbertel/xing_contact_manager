@@ -18,8 +18,8 @@
                         
             $this->db_host        = "localhost";
             $this->db_db          = "xing_contacts";
-            $this->db_username    = "xxx";
-            $this->db_password    = "xxx";
+            $this->db_username    = "root";
+            $this->db_password    = "banane030";
             
             // $database = new PDO("mysql:host=" . db_host . ";dbname=" . db_db, db_username, db_password);
             // $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -56,7 +56,8 @@
                                        telephone = '".$telephone."', status = '".$status."',
                                        first_contact_at = '".$fca."', first_contact_over_profile = '".$fcop."',
                                        first_contact_from = '".$fcf."', last_update = '".$lu."',
-                                       infos = '".$infos."' WHERE id = ".$id);            
+                                       infos = '".$infos."' WHERE id = ".$id);
+            $this->datasets = self::getDatasets();
         }
         
         //**********************************************************************************
@@ -110,6 +111,30 @@
             }
             return $searchresults;
         }
+        
+                /*
+        search for dataset
+        params $term (searchterm) and $type (searchtype)
+        returns array of datasets who contain right result
+        */
+        public function filterDatasetID($id) {
+           
+           $searchresults;
+           
+           foreach($this->datasets as $actual_dataset) {
+                foreach ($actual_dataset as $oneentry) {
+                    if ($actual_dataset['id'] == $id) {
+                        $searchresults[] = $actual_dataset;
+                        break;
+                    }  
+                }
+            }
+            return $searchresults;
+        }
+        
+        
+        
+        
 }
 
 ?>
