@@ -29,7 +29,7 @@
             if (!isset($_SESSION['mode_1'])) {
                 $_SESSION['mode_1'] = 'unlogged';            
             }
-            // mode for rendering homepage (how to)
+            // mode for rendering homepage (how to) /// describes last user action
             if (!isset($_SESSION['mode_2'])) {
                 $_SESSION['mode_2'] = 'default';
             }
@@ -54,6 +54,8 @@
                     break;
                 case "logged":
                     // check REQUEST and handle
+                    
+                    // 1. User pressed logout button
                     if (isset($_GET['logout'])) {
                         $_SESSION['mode_1'] = 'unlogged';
                         $_SESSION['mode_3'] = 'legally_unlogged';
@@ -61,7 +63,8 @@
                         session_unset();
                         break;
                     }
-
+                    
+                     // 2. User pressed showall datasets button
                     if (isset($_GET['showall'])) {
                         $_SESSION['mode_2'] = 'show';
                         $_SESSION['mode_3'] = 'logged';
@@ -69,7 +72,8 @@
                         $this->view_home->display($_SESSION['mode_2'], $this->model_home->datasets);
                         break;
                     }
-                   
+                    
+                     // 3. User pressed search datasets button
                     if (isset($_GET['search'])) {
                         $_SESSION['mode_2'] = 'show';
                         $_SESSION['mode_3'] = 'logged';
@@ -78,6 +82,7 @@
                         break;
                     }
                     
+                    // 4. User pressed delete view button
                     if (isset($_GET['deleteview'])) {
                         $_SESSION['mode_2'] = 'default';
                         $_SESSION['mode_3'] = 'logged';
@@ -86,6 +91,7 @@
                         break;
                     }
                     
+                    // 5. User pressed edit dataset button
                     if (isset($_GET['editID'])) {
                         $_SESSION['mode_2'] = 'edit';
                         $_SESSION['mode_3'] = 'logged';
@@ -94,16 +100,57 @@
                         break;
                     }
                     
+                    // 6. User pressed save edited dataset button
                     if (isset($_GET['saveID'])) {
                         $_SESSION['mode_2'] = 'saved';
                         $_SESSION['mode_3'] = 'logged';
-                        $this->model_home->updateDataset($_GET['saveID'], $_GET['firstname'], $_GET['name'], $_GET['email'], $_GET['telephone'], $_GET['status'], $_GET['first_contact_at'], $_GET['first_contact_over_profile'], $_GET['first_contact_from'], $_GET['last_update'], $_GET['infos']);
+                        $this->model_home->updateDataset($_GET['id'],
+                                                         $_GET['firstname'],
+                                                         $_GET['name'],
+                                                         $_GET['email'],
+                                                         $_GET['telephone'],
+                                                         $_GET['status'],
+                                                         $_GET['first_contact_at'],
+                                                         $_GET['first_contact_over_profile'],
+                                                         $_GET['first_contact_from'],
+                                                         $_GET['last_update'],
+                                                         $_GET['infos']);
                         $this->view_login_logout->display($_SESSION['mode_3']);
                         $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($_GET['saveID']));
                         break;
                     }
                     
+                    // 7. User pressed insert new dataset button
+                    if (isset($_GET['insert'])) {
+                        echo "HUHU!";
+                        $_SESSION['mode_2'] = 'insert';
+                        $_SESSION['mode_3'] = 'logged';
+                        $this->view_login_logout->display($_SESSION['mode_3']);
+                        $this->view_home->display($_SESSION['mode_2'], NULL);
+                        break;
+                    }
                     
+                    // 8. User pressed save new dataset button
+                    if (isset($_GET['saveDS'])) {
+                        echo "HUHU!";
+                        $_SESSION['mode_2'] = 'saved'; // MUST SAVE, brauch dazu aus Model_Home die ID des neuen DS.
+                        $_SESSION['mode_3'] = 'logged';
+                        $this->model_home->insertDataset($_GET['firstname'],
+                                                         $_GET['name'],
+                                                         $_GET['email'],
+                                                         $_GET['telephone'],
+                                                         $_GET['status'],
+                                                         $_GET['first_contact_at'],
+                                                         $_GET['first_contact_over_profile'],
+                                                         $_GET['first_contact_from'],
+                                                         $_GET['last_update'],
+                                                         $_GET['infos']);
+                        $this->view_login_logout->display($_SESSION['mode_3']);
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($this->model_home->getLastID()));
+                        break;
+                    }
+                    
+                    // 9. User made anything else             
                     else {
                         $_SESSION['mode_1'] = 'unlogged';
                         $_SESSION['mode_3'] = 'illegally_unlogged';
