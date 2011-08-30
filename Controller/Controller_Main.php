@@ -25,9 +25,9 @@
             
             // check if my session modes are set
             
-            // general mode (logged / unlogged)
+            // general mode (new / logged / unlogged)
             if (!isset($_SESSION['mode_1'])) {
-                $_SESSION['mode_1'] = 'unlogged';            
+                $_SESSION['mode_1'] = 'new';            
             }
             // mode for rendering homepage (how to) /// describes last user action
             if (!isset($_SESSION['mode_2'])) {
@@ -35,16 +35,20 @@
             }
             // mode for rendering login / logout (how to)
             if (!isset($_SESSION['mode_3'])) {
-                $_SESSION['mode_2'] = 'default';
+                $_SESSION['mode_3'] = 'default';
             }
                   
             // check session mode
             switch ($_SESSION['mode_1']) {
+                case "new":
+                    $_SESSION['mode_1'] = 'unlogged';
+                    $this->view_login_logout->display($_SESSION['mode_3']);
+                    break;
                 case "unlogged":
                     if (isset($_GET['username']) && isset($_GET['password'])) {
                         if(self::login()) {
                             $this->view_login_logout->display($_SESSION['mode_3']);
-                            $this->view_home->display($_SESSION['mode_2']);
+                            $this->view_home->display($_SESSION['mode_2'], NULL);
                         } else {
                             $this->view_login_logout->display($_SESSION['mode_3']);
                         }
@@ -60,7 +64,6 @@
                         $_SESSION['mode_1'] = 'unlogged';
                         $_SESSION['mode_3'] = 'legally_unlogged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        session_unset();
                         break;
                     }
                     
@@ -69,7 +72,7 @@
                         $_SESSION['mode_2'] = 'show';
                         $_SESSION['mode_3'] = 'logged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->datasets);
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
                         break;
                     }
                     
@@ -79,6 +82,15 @@
                         $_SESSION['mode_3'] = 'logged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
                         $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($_GET['searchterm'],$_GET['searchtype']));
+                        break;
+                    }
+                    
+                    // 3.1. User pressed NEW search datasets button
+                    if (isset($_GET['newsearch'])) {
+                        $_SESSION['mode_2'] = 'show';
+                        $_SESSION['mode_3'] = 'logged';
+                        $this->view_login_logout->display($_SESSION['mode_3']);
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->newSearchDataset($_GET['newsearchterm']));
                         break;
                     }
                     
@@ -107,8 +119,7 @@
                         $this->model_home->updateDataset($_GET['id'],
                                                          $_GET['firstname'],
                                                          $_GET['name'],
-                                                         $_GET['email'],
-                                                         $_GET['telephone'],
+                                                         $_GET['job'],
                                                          $_GET['status'],
                                                          $_GET['first_contact_at'],
                                                          $_GET['first_contact_over_profile'],
@@ -122,7 +133,6 @@
                     
                     // 7. User pressed insert new dataset button
                     if (isset($_GET['insert'])) {
-                        echo "HUHU!";
                         $_SESSION['mode_2'] = 'insert';
                         $_SESSION['mode_3'] = 'logged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
@@ -132,13 +142,11 @@
                     
                     // 8. User pressed save new dataset button
                     if (isset($_GET['saveDS'])) {
-                        echo "HUHU!";
-                        $_SESSION['mode_2'] = 'saved'; // MUST SAVE, brauch dazu aus Model_Home die ID des neuen DS.
+                        $_SESSION['mode_2'] = 'saved';
                         $_SESSION['mode_3'] = 'logged';
                         $this->model_home->insertDataset($_GET['firstname'],
                                                          $_GET['name'],
-                                                         $_GET['email'],
-                                                         $_GET['telephone'],
+                                                         $_GET['job'],
                                                          $_GET['status'],
                                                          $_GET['first_contact_at'],
                                                          $_GET['first_contact_over_profile'],
@@ -155,7 +163,6 @@
                         $_SESSION['mode_1'] = 'unlogged';
                         $_SESSION['mode_3'] = 'illegally_unlogged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        session_unset();
                     }
                 }
         }

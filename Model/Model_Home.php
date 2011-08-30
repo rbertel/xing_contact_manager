@@ -1,95 +1,121 @@
 <?php
     
+    /*
+      class Model_Home is the main interface to
+      the database, it can connect, insert,
+      update, search...
+    */ 
+    
     class Model_Home {
+        
+        //**********************************************************************************
                
-        // some variables   
-        public $db_host;
-        public $db_db;
-        public $db_username;
-        public $db_password;
-        public $res;
-        public $num;
-        public $datasets;
+        // some variables
+        private $db;
+        private $db_username;
+        private $db_password;
         
         //**********************************************************************************
         
-        // connects to DB
+        /*
+          constructor
+        */
         public function __construct() {
                         
-            $this->db_host        = "localhost";
-            $this->db_db          = "xing_contacts";
             $this->db_username    = "root";
             $this->db_password    = "banane030";
-            
-            // $database = new PDO("mysql:host=" . db_host . ";dbname=" . db_db, db_username, db_password);
-            // $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-            mysql_connect($this->db_host, $this->db_username, $this->db_password);
-            mysql_selectdb($this->db_db);
-            
-            $this->datasets = self::getDatasets();
         
         }
         
         //**********************************************************************************
         
-        // insert new dataset
-        public function insertDataset($firstname, $name, $email, $telephone, $status,
+        /*
+          connects to DB
+        */
+        public function connectDB() {
+            
+            try {
+                $this->db = new PDO('mysql:host=localhost;dbname=xing_contacts',
+                                     $this->db_username, $this->db_password);
+                $this->db->query("SET NAMES 'utf8'");
+            } catch (PDOException $e) {
+                echo "Fehler: ".$e->getMessage();
+                die();
+            }
+        }
+        
+        //**********************************************************************************
+        
+        /*
+          insert new dataset
+        */
+        public function insertDataset($firstname, $name, $job, $status,
                                       $fca, $fcop, $fcf, $lu, $infos) {
+           
+            self::connectDB();
+            $this->db->query  ("INSERT INTO contacts (id, firstname, name, job,
+                                status, first_contact_at, first_contact_over_profile,
+                                first_contact_from, last_update, infos) VALUES (NULL,
+                                '".$firstname."','". $name."','".$job."','".$status."',
+                                '".$fca."','".$fcop."','".$fcf."','". $lu."',
+                                '".$infos."')");
             
-            $this->res = mysql_query ("INSERT INTO contacts (id, firstname, name, email,
-                                      telephone, status, first_contact_at, first_contact_over_profile,
-                                      first_contact_from, last_update, infos) VALUES (NULL,
-                                      '".$firstname."','". $name."','".$email."','".$telephone."',
-                                      '".$status."','".$fca."','".$fcop."','".$fcf."','". $lu."',
-                                      '".$infos."')");
-            $this->datasets = self::getDatasets();
+            $this->db = NULL;
+            
         }
         
         //**********************************************************************************
         
-        // update one dataset regarding the id 
-        public function updateDataset($id, $firstname, $name, $email, $telephone, $status,
+        /*
+          update one dataset
+          regarding the id
+        */
+        public function updateDataset($id, $firstname, $name, $job, $status,
                                       $fca, $fcop, $fcf, $lu, $infos) {
+            // connect DB
+            self::connectDB();
             
-            $this->res =  mysql_query("UPDATE contacts SET firstname = '".$firstname."',
-                                       name = '".$name."', email = '".$email."',
-                                       telephone = '".$telephone."', status = '".$status."',
-                                       first_contact_at = '".$fca."', first_contact_over_profile = '".$fcop."',
-                                       first_contact_from = '".$fcf."', last_update = '".$lu."',
-                                       infos = '".$infos."' WHERE id = ".$id);
-            $this->datasets = self::getDatasets();
+            // update dataset
+            $this->db->query  ("UPDATE contacts SET firstname = '".$firstname."',
+                                name = '".$name."', job = '".$job."',
+                                status = '".$status."', first_contact_at = '".$fca."',
+                                first_contact_over_profile = '".$fcop."',
+                                first_contact_from = '".$fcf."', last_update = '".$lu."',
+                                infos = '".$infos."' WHERE id = ".$id);
+            
+            $this->db = NULL;
         }
         
         //**********************************************************************************
         
-        /* gets all datasets
-           returns array with all datasets */ 
+        /*
+          gets all datasets
+          returns array with all datasets
+        */ 
         public function getDatasets() {
             
-            mysql_query("SET NAMES 'utf8'");
-            $this->res = mysql_query("SELECT * FROM contacts ORDER BY `id` ASC");
-            $this->num = mysql_num_rows($this->res);
-            
+            // connect DB
+            self::connectDB();
+                        
             // fill $entries with all datasets
             $i = 0;
-            while($entry = mysql_fetch_assoc($this->res)){
-                
+            foreach ($this->db->query("SELECT * FROM contacts ORDER BY `id` ASC") as $entry) {
                 $all_entries[$i] = array (
                     'id' => $entry['id'],
                     'firstname' => $entry['firstname'],
                     'name' => $entry['name'],
-                    'email' => $entry['email'],
-                    'telephone' => $entry['telephone'],
+                    'job' => $entry['job'],
                     'status' => $entry['status'],
                     'first_contact_at' => $entry['first_contact_at'],
                     'first_contact_over_profile' => $entry['first_contact_over_profile'],
                     'first_contact_from' => $entry['first_contact_from'],
                     'last_update' => $entry['last_update'],
-                    'infos' => $entry['infos']);
-                    $i++;    
+                    'infos' => $entry['infos']
+                );
+                $i++;    
             }
-            return $all_entries;
+           $this->db = NULL;
+           return $all_entries;
         }
         
         //**********************************************************************************
@@ -100,17 +126,74 @@
         returns array of datasets who contain right result
         */
         public function searchDataset($term, $type) {
-           
+ 
+           // variable to initialize an array
            $searchresults;
-           echo $term;
-           foreach($this->datasets as $actual_dataset) {
+           foreach(self::getDatasets() as $actual_dataset) {
                 foreach ($actual_dataset as $oneentry) {
                     if (stristr($actual_dataset[$type], $term) != false) {
                         $searchresults[] = $actual_dataset;
-                        echo "HALLO";
-                        echo $actual_dataset['name'];
                         break;
                     }  
+                }
+            }
+            return $searchresults;
+        }
+        
+        
+        //**********************************************************************************
+               
+        /*
+        NEW search for dataset
+        params $term (searchterm) and $type (searchtype)
+        returns array of datasets who contain right result
+        */
+        public function newSearchDataset($terms) {
+            
+            
+            // if terms is emtpy return NULL
+            if ($terms == NULL) {
+                return NULL;
+            }
+                        
+            // delete whitespaces at the begin of terms
+            $terms = trim($terms);
+            
+            // if terms is emtpy return NULL
+            if ($terms == "") {
+                return NULL;
+            }
+
+            // my searchterms in an array
+            $term_array = explode(" ", $terms);
+            
+            // delete whitespaces at the begin of the single terms
+            foreach ($term_array as $term) {
+                if (($term == "") or ($term == NULL)) {
+                    unset($term);
+                }
+            }
+            
+            echo count($term_array);
+
+            // variable to initialize an array
+            $searchresults;
+            
+            // variable for checkin existence of term in dataset
+            $term_exists;
+            
+            // search in datasets for terms
+            foreach(self::getDatasets() as $actual_dataset) {
+                foreach ($term_array as $term) {
+                    if ($term == $actual_dataset['firstname'] or $term == $actual_dataset['name'] or $term == $actual_dataset['job']  or (stristr($actual_dataset['status'], $term) != false)) {
+                        $term_exists = TRUE;
+                    } else {
+                        $term_exists = FALSE;
+                        break;   
+                    }
+                }
+                if ($term_exists) {
+                    $searchresults[] = $actual_dataset;
                 }
             }
             return $searchresults;
@@ -122,8 +205,11 @@
             returns last ID of datasets
         */
         public function getLastID() {
-            return $this->datasets[count($this->datasets)-1]['id'];
+            $datasets = self::getDatasets();
+            return $datasets[count($datasets)-1]['id'];
         }
+        
+        //**********************************************************************************
         
         /*
         search for dataset
@@ -132,7 +218,7 @@
         */
         public function filterDatasetID($id) {
            $searchresults;
-           foreach($this->datasets as $actual_dataset) {
+           foreach(self::getDatasets() as $actual_dataset) {
                 foreach ($actual_dataset as $oneentry) {
                     if ($actual_dataset['id'] == $id) {
                         $searchresults[] = $actual_dataset;
@@ -142,6 +228,18 @@
             }
             return $searchresults;
         }
+        
+        //**********************************************************************************
+        
+
+        
+        //**********************************************************************************
+        
+        
+        
+        
+        
+        
 }
 
 ?>

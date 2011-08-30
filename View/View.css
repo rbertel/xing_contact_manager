@@ -1,5 +1,9 @@
 table.mytable { font-size: 12; border: 1px solid; border-color: black}
 td.default{background: #D2D2D0}
 th.default {background: #D2D2D0}
+td.login{text-align:right}
+select.status{width:100px;}
 input.editButton {font-size:0px; height:25px; width:100%}
+input.menu {width:200px}
+input.logoutButton {position: absolute; top: 10px; right: 10px; font-size:10px}
 textarea.infos {height:200px; width:100%}

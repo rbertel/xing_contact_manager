@@ -6,29 +6,30 @@
         */
         public function display($mode_2, $data) {
             
-            echo $mode_2;
+            // create 2 datepickers with JQUERY
+            echo   "<script type='text/javascript'>
+                        $(function() {
+                            $( '#first_contact_at' ).datepicker({ dateFormat: 'yy-mm-dd' });
+                        });
+                        $(function() {
+                            $( '#last_update' ).datepicker({ dateFormat: 'yy-mm-dd' });
+                        });
+                    </script>";
             // render different outputs
             switch ($mode_2) {
                 case 'show':
                     // create html
                     self::renderMenu();
                     echo
-                       "<html>
-                            <head>
-                                <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-                                <link rel='stylesheet' type='text/css' href='View/View.css'>
-                            </head>
-                            <body>
-                                <table class='mytable'>
+                               "<table class='mytable'>
                                     <th class='default'>ID</th>
                                     <th class='default'>VORNAME</th>
                                     <th class='default'>NAME</th>
-                                    <th class='default'>EMAIL</th>
-                                    <th class='default'>TEL</th>
+                                    <th class='default'>TÄTIGKEIT</th>
                                     <th class='default'>STATUS</th>
                                     <th class='default'>ERSTER KONTAKT AM</th>
-                                    <th class='default'>ERSTER KONTAKT UEBER PROFIL</th>
-                                    <th class='default'>ERSTER KONTAKT UEBER MA</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER MA</th>
                                     <th class='default'>LETZTES UPDATE</th>
                                     <th class='default'>INFOS</th>
                                     <th class='default'>DATENSATZ BEARBEITEN</th>";
@@ -77,13 +78,7 @@
                     // create html
                     self::renderMenu();
                     echo
-                       "<html>
-                            <head>
-                                <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-                                <link rel='stylesheet' type='text/css' href='View/View.css'>
-                            </head>
-                            <body>
-                                <table class='mytable'>
+                               "<table class='mytable'>
                                     <form method='GET'>";
                                     // iterate trough data and print on screen
                                     foreach($data as $actual_dataset) {
@@ -98,6 +93,56 @@
                                                     echo "<td><input name='".$keys[$key]."' value='".$oneentry."' readonly='readonly'></td>";
                                                     $key++;
                                                     break;
+                                                case 'job':
+                                                    echo "<td>
+                                                            <select name='job'>";
+                                                            // switch different input cases for status
+                                                            switch ($oneentry) {
+                                                                case 'SysAd':
+                                                                    echo 
+                                                                       "<option selected>SysAd</option>
+                                                                        <option>PHP</option>
+                                                                        <option>Frontend</option>
+                                                                        <option>Java</option>
+                                                                        <option>DWH/BI</option>";
+                                                                    break;
+                                                                case 'PHP':
+                                                                    echo 
+                                                                       "<option>SysAd</option>
+                                                                        <option selected>PHP</option>
+                                                                        <option>Frontend</option>
+                                                                        <option>Java</option>
+                                                                        <option>DWH/BI</option>";
+                                                                    break;
+                                                                case 'Frontend':
+                                                                    echo 
+                                                                       "<option>SysAd</option>
+                                                                        <option>PHP</option>
+                                                                        <option selected>Frontend</option>
+                                                                        <option>Java</option>
+                                                                        <option>DWH/BI</option>";
+                                                                    break;
+                                                                case 'Java':
+                                                                    echo 
+                                                                       "<option>SysAd</option>
+                                                                        <option>PHP</option>
+                                                                        <option>Frontend</option>
+                                                                        <option selected>Java</option>
+                                                                        <option>DWH/BI</option>";
+                                                                    break;
+                                                                case 'DWH/BI':
+                                                                    echo 
+                                                                       "<option selected>SysAd</option>
+                                                                        <option>PHP</option>
+                                                                        <option>Frontend</option>
+                                                                        <option>Java</option>
+                                                                        <option selected>DWH/BI</option>";
+                                                                    break;
+                                                            } // switch status
+                                                            echo "</select>
+                                                        </td>";
+                                                        $key++;
+                                                        break; 
                                                 case 'status':
                                                     echo "<td>
                                                             <select name='status'>";
@@ -178,6 +223,14 @@
                                                         </td>";
                                                         $key++;
                                                         break;
+                                                case 'first_contact_at':
+                                                    echo "<td><input id='first_contact_at' name='".$keys[$key]."' value='".$oneentry."'></td>";
+                                                    $key++;
+                                                    break;
+                                                case 'last_update':
+                                                    echo "<td><input id='last_update' name='".$keys[$key]."' value='".$oneentry."'></td>";
+                                                    $key++;
+                                                    break;
                                                 case 'infos':
                                                     echo "<td ><textarea class='infos' name='".$keys[$key]."'>".$oneentry."</textarea></td>";
                                                     break;
@@ -206,14 +259,8 @@
                 case 'insert':
                     // create html
                     self::renderMenu();
-                    echo
-                       "<html>
-                            <head>
-                                <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-                                <link rel='stylesheet' type='text/css' href='View/View.css'>
-                            </head>
-                            <body>
-                                <table class='mytable'>
+                    echo        
+                               "<table class='mytable'>
                                     <form method='GET'>
                                         <tr>
                                             <td class='default'>VORNAME</td>
@@ -223,12 +270,16 @@
                                             <td class='default'>NAME</td>
                                             <td><input name='name'></td>
                                          <tr>
-                                            <td class='default'>EMAIL</td>
-                                            <td><input name='email'></td>
-                                        </tr>
-                                         <tr>
-                                            <td class='default'>TEL</td>
-                                            <td><input name='telephone'></td>
+                                            <td class='default'>TÄTIGKEIT</td>
+                                            <td>
+                                                <select name='job'>
+                                                    <option>SysAd</option>
+                                                    <option>PHP</option>
+                                                    <option>Frontend</option>
+                                                    <option>Java</option>
+                                                    <option>DWH/BI</option>
+                                                </select>
+                                            </td>
                                         </tr>
                                          <tr>
                                             <td class='default'>STATUS</td>
@@ -246,19 +297,19 @@
                                         </tr>
                                          <tr>
                                             <td class='default'>ERSTER KONTAKT AM</td>
-                                            <td><input name='first_contact_at'></td>
+                                            <td><input id='first_contact_at' name='first_contact_at'></td>
                                         </tr>
                                          <tr>
-                                            <td class='default'>ERSTER KONTAKT UEBER PROFIL</td>
+                                            <td class='default'>ERSTER KONTAKT ÜBER PROFIL</td>
                                             <td><input name='first_contact_over_profile'></td>
                                         </tr>
                                          <tr>
-                                            <td class='default'>ERSTER KONTAKT UEBER MA</td>
+                                            <td class='default'>ERSTER KONTAKT ÜBER MA</td>
                                             <td><input name='first_contact_from'></td>
                                         </tr>
                                         <tr>
                                             <td class='default'>LETZTES UPDATE</td>
-                                            <td><input name='last_update'></td>
+                                            <td><input id='last_update' name='last_update'></td>
                                         </tr>
                                         <tr>
                                         </tr>
@@ -278,25 +329,18 @@
                     // create html
                     self::renderMenu();
                     echo
-                       "<html>
-                            <head>
-                                <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-                                <link rel='stylesheet' type='text/css' href='View/View.css'>
-                            </head>
-                            <body>
-                                <script type='text/javascript'>
+                               "<script type='text/javascript'>
                                     alert('Ihr Datensatz wurde gespeichert.');
                                 </script>
                                 <table class='mytable'>
                                     <th class='default'>ID</th>
                                     <th class='default'>VORNAME</th>
                                     <th class='default'>NAME</th>
-                                    <th class='default'>EMAIL</th>
-                                    <th class='default'>TEL</th>
+                                    <th class='default'>TÄTIGKEIT</th>
                                     <th class='default'>STATUS</th>
                                     <th class='default'>ERSTER KONTAKT AM</th>
-                                    <th class='default'>ERSTER KONTAKT UEBER PROFIL</th>
-                                    <th class='default'>ERSTER KONTAKT UEBER MA</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER MA</th>
                                     <th class='default'>LETZTES UPDATE</th>
                                     <th class='default'>INFOS</th>
                                     <th class='default'>DATENSATZ BEARBEITEN</th>";
@@ -343,30 +387,34 @@
                     break; // end saved
                 default:
                     self::renderMenu();
+                    echo "</body>
+                        </html>";
+                    
             } // end switch
         }
         
         // renders the menu
         public function renderMenu() {
             echo
-               "<html>
-                    <body>
-                        <form method='GET'>
-                            <input type='submit' name='showall' value='Alle Datensaetze anzeigen'>
-                            <input type='submit' name='deleteview' value='Anzeigefeld leeren'>
-                            <input type='submit' name='insert' value='Neuen Datensatz erstellen'><br>
-                        </form>
-                         <br>
-                        <form method='GET'>
-                            <select name='searchtype' size='1'>
+                       "<form method='GET'>
+                            <select class='status' name='searchtype' size='1'>
                                 <option>name</option>
                                 <option>status</option>
                             </select>
                             <input name='searchterm'>
                             <input type='submit' name='search' value='Datensatz suchen und anzeigen'><br>
                         </form>
-                    </body>
-                </html>";  
+                        
+                        <form method='GET'>
+                            <input name='newsearchterm'>
+                            <input type='submit' name='newsearch' value='NEU Datensatz suchen und anzeigen'><br>
+                        </form>
+                        
+                        <form method='GET'>
+                            <input class='menu' type='submit' name='showall' value='Alle Datensätze anzeigen'>
+                            <input class='menu' type='submit' name='insert' value='Neuen Datensatz erstellen'>
+                            <input class='menu' type='submit' name='deleteview' value='Anzeigefeld leeren'><br>
+                        </form>";  
         }
         
         // translate english terms into german
@@ -378,18 +426,16 @@
                     return 'VORNAME';
                 case 'name':
                     return 'NAME';
-                case 'email':
-                    return 'EMAIL';
-                case 'telephone':
-                    return 'TELEFON';
+                case 'job':
+                    return 'TÄTIGKEIT';
                 case 'status':
                     return 'STATUS';
                 case 'first_contact_at':
                     return 'ERSTER KONTAKT AM';
                 case 'first_contact_over_profile':
-                    return 'ERSTER KONTAKT UEBER PROFIL';
+                    return 'ERSTER KONTAKT ÜBER PROFIL';
                 case 'first_contact_from':
-                    return 'ERSTER KONTAKT UEBER MA';
+                    return 'ERSTER KONTAKT ÜBER MA';
                 case 'last_update':
                     return 'LETZTES UPDATE';
                 case 'infos':
