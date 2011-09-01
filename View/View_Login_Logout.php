@@ -119,10 +119,6 @@
                         <link rel='stylesheet' type='text/css' href='JQuery/jquery-ui.css'/>
                         <script src='JQuery/jquery.min.js'></script>
                         <script src='JQuery/jquery-ui.min.js'></script>
-                        <script src='JQuery/jquery.tablesorter.min.js'></script>
-                        <script src='JQuery/jquery-1.6.2.js'></script>
-                        
-                        
                     </head>
                     <body>
                         <font size='7' style='font-family:Helvetica'>

@@ -64,7 +64,7 @@
                 case "logged":
                     // check REQUEST and handle
                     
-                    // 1. User pressed logout button
+                    // 1. User pressed LOGOUT button
                     if (isset($_GET['logout'])) {
                         $_SESSION['mode_1'] = 'unlogged';
                         $_SESSION['mode_3'] = 'legally_unlogged';
@@ -72,7 +72,7 @@
                         break;
                     }
                     
-                     // 2. User pressed showall datasets button
+                     // 2. User pressed SHOWALL DATASETS button
                     if (isset($_GET['showall'])) {
                         $_SESSION['mode_2'] = 'show';
                         $_SESSION['mode_3'] = 'logged';
@@ -82,7 +82,7 @@
                         break;
                     }
                 
-                    // 3. User pressed search datasets button
+                    // 3. User pressed SEARCH DATASETS button
                     if (isset($_GET['search'])) {
                         $_SESSION['mode_2'] = 'show';
                         $_SESSION['mode_3'] = 'logged';
@@ -92,7 +92,7 @@
                         break;
                     }
                     
-                    // 4. User pressed delete view button
+                    // 4. User pressed DELETE VIEW button
                     if (isset($_GET['deleteview'])) {
                         $_SESSION['mode_2'] = 'default';
                         $_SESSION['mode_3'] = 'logged';
@@ -101,17 +101,117 @@
                         break;
                     }
                     
-                    // 5. User pressed edit dataset button
-                    if (isset($_GET['editID'])) {
-                        $_SESSION['mode_2'] = 'edit';
+                    // 7. User pressed INSERT NEW DATASET button
+                    if (isset($_GET['insert'])) {
+                        $_SESSION['mode_2'] = 'insert';
                         $_SESSION['mode_3'] = 'logged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($_GET['editID']));
+                        $this->view_home->display($_SESSION['mode_2'], NULL);
                         break;
                     }
                     
-                    // 6. User pressed save edited dataset button
-                    if (isset($_GET['saveID'])) {
+                    // 8. User pressed SAVE NEW DATASET button
+                    if (isset($_GET['saveNew'])) {
+                        $_SESSION['mode_2'] = 'saved';
+                        $_SESSION['mode_3'] = 'logged';
+                        $this->model_home->insertDataset($_GET['firstname'],
+                                                         $_GET['name'],
+                                                         $_GET['job'],
+                                                         $_GET['status'],
+                                                         $_GET['first_contact_at'],
+                                                         $_GET['first_contact_over_profile'],
+                                                         $_GET['first_contact_from'],
+                                                         $_GET['last_update'],
+                                                         $_GET['infos']);
+                        $this->view_login_logout->display($_SESSION['mode_3']);
+                        // check previous view and reload 
+                        if (end($_SESSION['lastview']) == 'showall') {
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                        } else {
+                            $lastSearchTerms_array; 
+                            foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
+                                $lastSearchTerms_array[] = $lastSearchTerms;
+                            }
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                        }
+                        break;
+                    }
+                  
+                   // 9. User pressed EDITDELETE button
+                    if (isset($_GET['editdelete'])) {
+                        $_SESSION['mode_3'] = 'logged';
+                        
+                        // if user choosed no datasets
+                        if (!isset($_GET['choosed'])) {
+                            $_SESSION['mode_2'] = 'nothingChoosed';
+                            $this->view_login_logout->display($_SESSION['mode_3']);
+                            // check previous view and reload
+                            if (end($_SESSION['lastview']) == 'showall') {
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                            } else {
+                                $lastSearchTerms_array; 
+                                foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
+                                    $lastSearchTerms_array[] = $lastSearchTerms;
+                                }
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                            }
+                            break;
+                        }    
+                         
+                        // if user choosed edit 
+                        elseif($_GET['action'] == "Bearbeiten") {
+                            $_SESSION['mode_2'] = 'editFailed';
+                            // if user choose more than one dataset, go back to old view
+                            if (count($_GET['choosed'])>1) {
+                                $this->view_login_logout->display($_SESSION['mode_3']);
+                                // check previous view and reload
+                                if (end($_SESSION['lastview']) == 'showall') {
+                                    $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                                } else {
+                                    $lastSearchTerms_array; 
+                                    foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
+                                        $lastSearchTerms_array[] = $lastSearchTerms;
+                                    }
+                                    $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                                }
+                            }
+                            // if user choose one dataset, go to edit view
+                            elseif (count($_GET['choosed'])==1) {
+                                $_SESSION['mode_2'] = 'edit';
+                                $this->view_login_logout->display($_SESSION['mode_3']);
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($_GET['choosed']));
+                            }
+                            break;
+                        }
+                        // if user choosed delete 
+                        elseif($_GET['action'] == "Entfernen") {
+                            $_SESSION['mode_2'] = 'delete';
+                            $_SESSION['delete'] = $_GET['choosed']; // save ids to delete
+                        }
+                        // if user forgot to choose delete or edit
+                        elseif($_GET['action'] == "") {
+                            $_SESSION['mode_2'] = 'show';
+                            $this->view_login_logout->display($_SESSION['mode_3']);
+                            // check previous view and reload
+                            if (end($_SESSION['lastview']) == 'showall') {
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                            } else {
+                                $lastSearchTerms_array; 
+                                foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
+                                    $lastSearchTerms_array[] = $lastSearchTerms;
+                                }
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                            }
+                            break;
+                        }
+                        // default rendering actions
+                        $this->view_login_logout->display($_SESSION['mode_3']);
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($_GET['choosed']));
+                        break;
+                    }
+                    
+                    // 6. User pressed SAVE EDITED DATASET button
+                    if (isset($_GET['saveEdited'])) {
                         $_SESSION['mode_2'] = 'saved';
                         $_SESSION['mode_3'] = 'logged';
                         $this->model_home->updateDataset($_GET['id'],
@@ -138,56 +238,11 @@
                        break;
                     }
                     
-                    // 7. User pressed insert new dataset button
-                    if (isset($_GET['insert'])) {
-                        $_SESSION['mode_2'] = 'insert';
-                        $_SESSION['mode_3'] = 'logged';
-                        $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], NULL);
-                        break;
-                    }
-                    
-                    // 8. User pressed save new dataset button
-                    if (isset($_GET['saveDS'])) {
-                        $_SESSION['mode_2'] = 'saved';
-                        $_SESSION['mode_3'] = 'logged';
-                        $this->model_home->insertDataset($_GET['firstname'],
-                                                         $_GET['name'],
-                                                         $_GET['job'],
-                                                         $_GET['status'],
-                                                         $_GET['first_contact_at'],
-                                                         $_GET['first_contact_over_profile'],
-                                                         $_GET['first_contact_from'],
-                                                         $_GET['last_update'],
-                                                         $_GET['infos']);
-                        $this->view_login_logout->display($_SESSION['mode_3']);
-                        // check previous view and reload 
-                        if (end($_SESSION['lastview']) == 'showall') {
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
-                        } else {
-                            $lastSearchTerms_array; 
-                            foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
-                                $lastSearchTerms_array[] = $lastSearchTerms;
-                            }
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
-                        }
-                        break;
-                    }
-                    
-                    // 9. User pressed delete dataset button
-                    if (isset($_GET['delID'])) {
-                        $_SESSION['mode_2'] = 'delete';
-                        $_SESSION['mode_3'] = 'logged';
-                        $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($_GET['delID']));
-                        break;
-                    }
-                    
-                    // 10. User pressed confirm delete dataset button
-                    if (isset($_GET['confirmDelID'])) {
+                    // 10. User pressed CONFIRM DELETE dataset button
+                    if (isset($_GET['confirmDelIDNEU'])) {
                         $_SESSION['mode_2'] = 'deleted';
                         $_SESSION['mode_3'] = 'logged';
-                        $this->model_home->deleteDataset($_GET['confirmDelID']);
+                        $this->model_home->deleteDataset($_SESSION['delete']);
                         $this->view_login_logout->display($_SESSION['mode_3']);
                         // check previous view and reload 
                         if (end($_SESSION['lastview']) == 'showall') {
@@ -202,7 +257,25 @@
                         break;
                     }
                     
-                    // 11. User made anything else             
+                    // 11. User pressed BACK button
+                    if (isset($_GET['back'])) {
+                        $_SESSION['mode_2'] = 'show';
+                        $_SESSION['mode_3'] = 'logged';
+                        $this->view_login_logout->display($_SESSION['mode_3']);
+                        // check previous view and reload 
+                        if (end($_SESSION['lastview']) == 'showall') {
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                        } else {
+                            $lastSearchTerms_array; 
+                            foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
+                                $lastSearchTerms_array[] = $lastSearchTerms;
+                            }
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                        }
+                        break;
+                    }
+                    
+                    // 12. User made anything else             
                     else {
                         $_SESSION['mode_1'] = 'unlogged';
                         $_SESSION['mode_3'] = 'illegally_unlogged';
@@ -225,9 +298,6 @@
                 $_SESSION['mode_3'] = 'login_denied';
                 return false;
             }
-            
-            
-            
         }
         
       

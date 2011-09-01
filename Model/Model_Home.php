@@ -14,7 +14,7 @@
         private $db;
         private $db_username;
         private $db_password;
-        private  $view;
+
         
         //**********************************************************************************
         
@@ -44,17 +44,7 @@
                 die();
             }
         }
-        
-        //**********************************************************************************
-        
-        /*
-          getView
-        */
-        public function getView() {
-            return $this->view;
-        }
-        
-        
+      
         
         //**********************************************************************************
         
@@ -104,13 +94,15 @@
           delete one dataset
           regarding the id
         */
-        public function deleteDataset($id) {
+        public function deleteDataset($ids) {
             
             // connect DB
             self::connectDB();
             
             // update dataset
-            $this->db->query  ("DELETE FROM contacts WHERE id = ".$id);
+            foreach ($ids as $id) {
+                $this->db->query  ("DELETE FROM contacts WHERE id = ".$id);
+            }
             $this->db = NULL;
         }
         
@@ -143,7 +135,6 @@
                 $i++;    
             }
            $this->db = NULL;
-           $this->view = $all_entries;
            return $all_entries;
         }
         
@@ -304,17 +295,17 @@
         
         /*
         search for dataset
-        params $id (searchterm)
+        params $id (array of ids to search)
         returns dataset which contains right result
         */
-        public function filterDatasetID($id) {
-           $searchresults;
-           foreach(self::getDatasets() as $actual_dataset) {
-                foreach ($actual_dataset as $oneentry) {
+        public function filterDatasetID($ids) {
+        
+            $searchresults;
+            foreach(self::getDatasets() as $actual_dataset) {
+                foreach ($ids as $id) {
                     if ($actual_dataset['id'] == $id) {
                         $searchresults[] = $actual_dataset;
-                        break;
-                    }  
+                    }
                 }
             }
             return $searchresults;
