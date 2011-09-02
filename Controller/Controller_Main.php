@@ -42,6 +42,11 @@
             if (!isset($_SESSION['lastview'])) {
                 $_SESSION['lastview'] = array();
             }
+            // array for caching data while insert and checkDuplication
+            if (!isset($_SESSION['cacheData'])) {
+                $_SESSION['cacheData'] = array();
+            }
+            
                   
             // check session mode
             switch ($_SESSION['mode_1']) {
@@ -112,17 +117,44 @@
                     
                     // 8. User pressed SAVE NEW DATASET button
                     if (isset($_GET['saveNew'])) {
-                        $_SESSION['mode_2'] = 'saved';
                         $_SESSION['mode_3'] = 'logged';
-                        $this->model_home->insertDataset($_GET['firstname'],
-                                                         $_GET['name'],
-                                                         $_GET['job'],
-                                                         $_GET['status'],
-                                                         $_GET['first_contact_at'],
-                                                         $_GET['first_contact_over_profile'],
-                                                         $_GET['first_contact_from'],
-                                                         $_GET['last_update'],
-                                                         $_GET['infos']);
+                        $_SESSION['cacheData'] = array ($_GET['firstname'],
+                                                        $_GET['name'],
+                                                        $_GET['job'],
+                                                        $_GET['status'],
+                                                        $_GET['xing_profile'],
+                                                        $_GET['first_contact_at'],
+                                                        $_GET['first_contact_over_profile'],
+                                                        $_GET['first_contact_from'],
+                                                        $_GET['last_update'],
+                                                        $_GET['infos']);
+                        // if the new contact isnt in database
+                        if (!$this->model_home->existDuplicates($_GET['firstname'], $_GET['name'], $_GET['xing_profile'])) {
+                            $_SESSION['mode_2'] = 'saved';
+                            $this->model_home->insertDataset($_GET['firstname'],
+                                                             $_GET['name'],
+                                                             $_GET['job'],
+                                                             $_GET['status'],
+                                                             $_GET['xing_profile'],
+                                                             $_GET['first_contact_at'],
+                                                             $_GET['first_contact_over_profile'],
+                                                             $_GET['first_contact_from'],
+                                                             $_GET['last_update'],
+                                                             $_GET['infos']);
+                        } else {
+                            if (!is_null($this->model_home->getDuplicates())) {
+                                $_SESSION['mode_2'] = 'supposedDuplicated';
+                                $this->view_login_logout->display($_SESSION['mode_3']);
+                                $this->view_home->display($_SESSION['mode_2'], array($_SESSION['cacheData'], $this->model_home->getDuplicates()));
+                                break;
+                            } else {
+                                $_SESSION['mode_2'] = 'duplicated';
+                                $this->view_login_logout->display($_SESSION['mode_3']);
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                                break;
+                            }
+                            
+                        }
                         $this->view_login_logout->display($_SESSION['mode_3']);
                         // check previous view and reload 
                         if (end($_SESSION['lastview']) == 'showall') {
@@ -219,6 +251,7 @@
                                                          $_GET['name'],
                                                          $_GET['job'],
                                                          $_GET['status'],
+                                                         $_GET['xing_profile'],
                                                          $_GET['first_contact_at'],
                                                          $_GET['first_contact_over_profile'],
                                                          $_GET['first_contact_from'],

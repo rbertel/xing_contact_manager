@@ -62,7 +62,21 @@
                     echo "<br><font color='red' size='3'>Datensatz einfügen:</font><br>";
                     self::renderInsertTable();
                     echo "</body></html>";
-                    break; // end 'insert'                
+                    break; // end 'insert'
+                case 'duplicated':
+                    // create html
+                    self::renderMenu();
+                    echo "<font size='2' color='red'><b>! </b>Der Datensatz ist schon vorhanden</font><br>";
+                    self::renderInsertTable();
+                    echo "</body></html>";
+                    break; // end 'insert'
+                case 'supposedDuplicated':
+                    // create html
+                    self::renderMenu();
+                    echo "<font size='2' color='red'><b>! </b>Es wurden vermeintliche Duplikate gefunden</font><br>";
+                    self::renderValidateTable($data);
+                    echo "</body></html>";
+                    break; // end 'duplicated'
                 case 'saved':
                     // create html
                     self::renderMenu();
@@ -111,61 +125,65 @@
         */    
         public function renderShowTable($data) {
             echo "<form method='GET'><div class='actionTableCont'><table class='mytable'>
+                                    <th class='default'>X</th>
                                     <th class='default'>ID</th>
                                     <th class='default'>VORNAME</th>
                                     <th class='default'>NAME</th>
                                     <th class='default'>TÄTIGKEIT</th>
                                     <th class='default'>STATUS</th>
+                                    <th class='default'>XING PROFIL</th>
                                     <th class='default'>ERSTER KONTAKT AM</th>
                                     <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
                                     <th class='default'>ERSTER KONTAKT ÜBER MA</th>
                                     <th class='default'>LETZTES UPDATE</th>
-                                    <th class='default'>INFOS</th>
-                                    <th class='default'>X</th>";
+                                    <th class='default'>INFOS</th>";
                                     // iterate trough data and print on screen
                                     foreach($data as $actual_dataset) {
                                         echo "<tr>";
+                                        echo  "<td class='default'>
+                                                    <input type='checkbox' name='choosed[]' value='".$actual_dataset['id']."'>
+                                                </td>";
                                         foreach ($actual_dataset as $oneentry) {
                                             // choose background in fact of status
                                             switch ($actual_dataset['status']) {
                                                 case 'FINAL (R)':
-                                                    echo "<td bgcolor='red'>".$oneentry."</td>";
+                                                    echo "<td class='mycell' bgcolor='red'>".$oneentry."</td>";
                                                     break;
                                                 case 'FINAL (G)':
-                                                    echo "<td bgcolor='lime'>".$oneentry."</td>";
+                                                    echo "<td class='mycell' bgcolor='lime'>".$oneentry."</td>";
                                                     break;                                               
                                                 case 'PENDING (O)':
-                                                    echo "<td bgcolor='orange'>".$oneentry."</td>";
+                                                    echo "<td class='mycell' bgcolor='orange'>".$oneentry."</td>";
                                                     break;
                                                 case 'PENDING (V)':
-                                                    echo "<td bgcolor='plum'>".$oneentry."</td>";
+                                                    echo "<td class='mycell' bgcolor='plum'>".$oneentry."</td>";
                                                     break;
                                                 case 'FORWARDED':
-                                                    echo "<td bgcolor='yellow'>".$oneentry."</td>";
+                                                    echo "<td class='mycell' bgcolor='yellow'>".$oneentry."</td>";
                                                     break;
                                                 case 'POOL':
-                                                    echo "<td bgcolor='cyan'>".$oneentry."</td>";
+                                                    echo "<td class='mycell' bgcolor='cyan'>".$oneentry."</td>";
                                                     break;
                                                 case 'TERMIN':
-                                                    echo "<td bgcolor='greenyellow'>".$oneentry."</td>";
+                                                    echo "<td class='mycell' bgcolor='greenyellow'>".$oneentry."</td>";
                                                     break;
                                                 default:
                                                     echo "<td class='default'>".$oneentry."</td>";
                                             }
                                         }
-                                        echo   "    <td class='default'>
-                                                        <input type='checkbox' name='choosed[]' value='".$actual_dataset['id']."'>
-                                                    </td>";
                                         echo    "</tr>";
                                     }
                     echo
-                               "</table><div class='actionForm'><font size='2'>Ausgewählte Datensätze </font>
-                                    <select name='action'>
+                               "</table>
+                                <div class='arrow'><img src='eckpfeil.gif'></div>
+                                <div class='actionFormLeft'>
+                                    <select class='action' name='action'>
                                         <option></option>
                                         <option>Bearbeiten</option>
                                         <option>Entfernen</option>
                                     </select>
-                                    <input type='submit' name='editdelete' value='Go'></div></div></form>
+                                    <input type='submit' class='actionButton' name='editdelete' value='Go'>
+                                </div></div></form>
                             </body>
                         </html>";
             
@@ -189,6 +207,7 @@
             <th class='default'>NAME</th>
             <th class='default'>TÄTIGKEIT</th>
             <th class='default'>STATUS</th>
+            <th class='default'>XING PROFIL</th>
             <th class='default'>ERSTER KONTAKT AM</th>
             <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
             <th class='default'>ERSTER KONTAKT ÜBER MA</th>
@@ -354,7 +373,7 @@
         
         // renders the Insert Table        
         
-        public function renderInsertTable(){
+        public function renderInsertTable() {
             echo
             "<table class='edittable'>
                 <form method='GET'>
@@ -393,6 +412,10 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <td class='editinsertLeftAlign'>XING PROFIL</td>
+                        <td><input id='xing_profile' name='xing_profile'></td>
+                    </tr>
                      <tr>
                         <td class='editinsertLeftAlign'>ERSTER KONTAKT AM</td>
                         <td><input id='first_contact_at' name='first_contact_at'></td>
@@ -420,6 +443,79 @@
                         <td><input class='editButton' type='submit' name='saveNew'></td>
                         </form>
                 </table><br><form method='GET'><input class='backButton' type='submit' name='back' value='Zurück'></form>";
+        }
+        
+                //******************************************************************************************
+        
+        // renders the Insert Table        
+        
+        public function renderValidateTable($data) {
+            echo "<form method='GET'><div class='actionTableCont'><table class='mytable'>
+                                    <th class='default'>X</th>
+                                    <th class='default'>ID</th>
+                                    <th class='default'>VORNAME</th>
+                                    <th class='default'>NAME</th>
+                                    <th class='default'>TÄTIGKEIT</th>
+                                    <th class='default'>STATUS</th>
+                                    <th class='default'>XING PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT AM</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER MA</th>
+                                    <th class='default'>LETZTES UPDATE</th>
+                                    <th class='default'>INFOS</th>";
+                                    // iterate trough data and print on screen
+            echo "<tr><td class='newData'><font size='1' color='#873549'>X</font></td>
+                      <td class='newData'><font color='white'>-> Neuer Datensatz</font></td>";
+            foreach ($data[0] as $oneentry) {
+                echo "<td class='newData'><font color='white'>".$oneentry."</font></td>";
+            }
+                                    foreach($data[1] as $actual_dataset) {
+                                        echo "<tr>";
+                                         echo "<td class='default'>
+                                                <input type='checkbox' name='choosed[]' value='".$actual_dataset['id']."'>
+                                               </td>";
+                                        foreach ($actual_dataset as $oneentry) {
+                                            // choose background in fact of status
+                                            switch ($actual_dataset['status']) {
+                                                case 'FINAL (R)':
+                                                    echo "<td class='mycell' bgcolor='red'>".$oneentry."</td>";
+                                                    break;
+                                                case 'FINAL (G)':
+                                                    echo "<td class='mycell' bgcolor='lime'>".$oneentry."</td>";
+                                                    break;                                               
+                                                case 'PENDING (O)':
+                                                    echo "<td class='mycell' bgcolor='orange'>".$oneentry."</td>";
+                                                    break;
+                                                case 'PENDING (V)':
+                                                    echo "<td class='mycell' bgcolor='plum'>".$oneentry."</td>";
+                                                    break;
+                                                case 'FORWARDED':
+                                                    echo "<td class='mycell' bgcolor='yellow'>".$oneentry."</td>";
+                                                    break;
+                                                case 'POOL':
+                                                    echo "<td class='mycell' bgcolor='cyan'>".$oneentry."</td>";
+                                                    break;
+                                                case 'TERMIN':
+                                                    echo "<td class='mycell' bgcolor='greenyellow'>".$oneentry."</td>";
+                                                    break;
+                                                default:
+                                                    echo "<td class='default' class='default'>".$oneentry."</td>";
+                                            }
+                                        }
+                                        echo    "</tr>";
+                                    }
+                    echo
+                               "</table>
+                                    <div class='arrow'><img src='eckpfeil.gif'></div>
+                                    <div class='actionFormLeft'>
+                                        <input type='submit' class='actionButton' name='editdelete' value='Bearbeiten'>
+                                    </div>
+                                    <div class='actionFormRight'>
+                                        <font size='2' color='red'>Neuen Datensatz</font>
+                                        <input type='submit' class='actionButton' name='confirmInsert' value='Speichern'>
+                                    </div></div></form>
+                            </body>
+                        </html>"; 
         }
         
         //******************************************************************************************
@@ -474,6 +570,8 @@
                     return 'TÄTIGKEIT';
                 case 'status':
                     return 'STATUS';
+                case 'xing_profile':
+                    return 'XING PROFIL';
                 case 'first_contact_at':
                     return 'ERSTER KONTAKT AM';
                 case 'first_contact_over_profile':

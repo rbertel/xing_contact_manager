@@ -1,21 +1,27 @@
 table.mytable { font-size: 12; font-family: helvetica; width:100%;}
 table.edittable { font-size: 12; font-family: helvetica; width:400px; text-align: right}
 td.mycell {padding-left:5; padding-right:5}
-td.delcell {background: #D2D2D0; text-align:right;}
-td.default{background: #D2D2D0}
+td.delcell {background: #D2D2D0; text-align:left;}
+td.default{background: #D2D2D0; padding-left:5; padding-right:5}
+td.newData{background: #873549; padding-left:5; padding-right:5}
 th.default {background: #D2D2D0; padding-left:5; padding-right:5}
 td.editinsertLeftAlign {background: #D2D2D0; padding-left:5; text-align:left}
 td.editinsertRightAlign {text-align:right}
 th.default {background: #D2D2D0; padding-left:5; padding-right:5}
 td.login{text-align:right}
 select.search{width:120px;}
-input.editButton {font-size:0px; height:25px; width:100%}
+select.action{font-size:12px;}
+input.actionButton {font-size:12px;}
+input.actionButton1 {font-size:10px;}
 input.delButton {font-size:0px; height:18px; width:18px}
 input.backButton {font-size:10px; margin-left:5px}
 input.menu {width:200px}
 input.logoutButton {position: absolute; top: 10px; right: 10px; font-size:10px}
 textarea.infos {height:200px; width:100%}
 div.tableCont{width:100%; overflow:auto }
-div.actionTableCont{width:1400px; text-align: right}
+div.actionTableCont{background: #FFFFFF; width:1400px; text-align: left}
 div.actionForm {margin-top:10px }
+div.arrow {float: left; background: #BBBBBB; margin-top:10px; margin-left:12px;}
+div.actionFormLeft {float: left; margin-top:8px; width:300px; text-align: left }
+div.actionFormRight {float: right; margin-top:8px; width:250px; text-align: right}
 body {font-family:helvetica}

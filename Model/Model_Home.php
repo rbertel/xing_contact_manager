@@ -51,15 +51,15 @@
         /*
           insert new dataset
         */
-        public function insertDataset($firstname, $name, $job, $status,
+        public function insertDataset($firstname, $name, $job, $status, $xing_profile,
                                       $fca, $fcop, $fcf, $lu, $infos) {
            
             self::connectDB();
             $this->db->query  ("INSERT INTO contacts (id, firstname, name, job,
-                                status, first_contact_at, first_contact_over_profile,
+                                status, xing_profile, first_contact_at, first_contact_over_profile,
                                 first_contact_from, last_update, infos) VALUES (NULL,
                                 '".$firstname."','". $name."','".$job."','".$status."',
-                                '".$fca."','".$fcop."','".$fcf."','". $lu."',
+                                '".$xing_profile."','".$fca."','".$fcop."','".$fcf."','". $lu."',
                                 '".$infos."')");
             
             $this->db = NULL;
@@ -72,7 +72,7 @@
           update one dataset
           regarding the id
         */
-        public function updateDataset($id, $firstname, $name, $job, $status,
+        public function updateDataset($id, $firstname, $name, $job, $status, $xing_profile,
                                       $fca, $fcop, $fcf, $lu, $infos) {
             // connect DB
             self::connectDB();
@@ -80,7 +80,8 @@
             // update dataset
             $this->db->query  ("UPDATE contacts SET firstname = '".$firstname."',
                                 name = '".$name."', job = '".$job."',
-                                status = '".$status."', first_contact_at = '".$fca."',
+                                status = '".$status."', xing_profile = '".$xing_profile."',
+                                first_contact_at = '".$fca."',
                                 first_contact_over_profile = '".$fcop."',
                                 first_contact_from = '".$fcf."', last_update = '".$lu."',
                                 infos = '".$infos."' WHERE id = ".$id);
@@ -126,6 +127,7 @@
                     'name' => $entry['name'],
                     'job' => $entry['job'],
                     'status' => $entry['status'],
+                    'xing_profile' => $entry['xing_profile'],
                     'first_contact_at' => $entry['first_contact_at'],
                     'first_contact_over_profile' => $entry['first_contact_over_profile'],
                     'first_contact_from' => $entry['first_contact_from'],
@@ -284,6 +286,48 @@
         //**********************************************************************************
                
         /*
+            check if duplicate exists
+            required if user insert new contact
+        */
+        
+        // array of supposed duplicates
+        private $supposed_duplicates = NULL;
+        
+        public function existDuplicates($firstname, $name, $xing_profile) {
+            
+            foreach(self::getDatasets() as $actual_dataset) {
+                // if name is duplicated
+                if ((self::termToLower($actual_dataset['firstname']) == self::termToLower($firstname)) and
+                    (self::termToLower($actual_dataset['name']) == self::termToLower($name))) {
+                    // check if xing profile of duplicated name is set
+                    if ($actual_dataset['xing_profile'] != "") {
+                        // if its set, compare the profiles and return true if its true
+                        if (self::termToLower($actual_dataset['xing_profile']) == self::termToLower($xing_profile)) {
+                            return true;
+                        }
+                    }
+                    // else add actual dataset as a supposed duplicate
+                    else {
+                        $this->supposed_duplicates[] = $actual_dataset;
+                    }
+                }
+            }
+            // if no duplicates are found
+            if (is_null($this->supposed_duplicates)) {
+                return false;
+            }
+            // if duplicates are found
+            return true;
+        }
+        
+        // getter for duplicates
+        public function getDuplicates () {
+            return $this->supposed_duplicates;    
+        }
+        
+        //**********************************************************************************
+               
+        /*
             returns last ID of datasets
         */
         public function getLastID() {
@@ -315,7 +359,7 @@
         
         /*
           little helper function to compare strings with "umlauts"
-          turns all chars in term to lower
+          turns all chars in term to lower and validate strings in utf8
         */
         
         public function termToLower ($term) {
