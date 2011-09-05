@@ -9,6 +9,7 @@
         public function display($mode_2, $data) {
             
             // create 2 datepickers with JQUERY for mode_2 -> edit or insert
+            // create function for mark or unmark the datasets
             echo   "<script type='text/javascript'>
                         $(function() {
                             $( '#first_contact_at' ).datepicker({ dateFormat: 'yy-mm-dd' });
@@ -20,6 +21,16 @@
                         { 
                             $('#tableToSort').tablesorter(); 
                         });
+                        
+                        function checkedall() {
+                            for (var i = 0; i < document.forms[3].elements.length; i++) {
+                                if (document.getElementById('checkall').checked == true) {
+                                    document.forms[3].elements[i].checked = true;
+                                } else {
+                                    document.forms[3].elements[i].checked = false;
+                                }
+                            }
+                        }
                     </script>";
             // render different outputs
             switch ($mode_2) {
@@ -28,75 +39,90 @@
                     self::renderMenu();
                     // if no data is there to show, render little info and break
                     if ($data == NULL) {
-                        echo "<font size='4'>Kein Datensatz gefunden, bitte erneut versuchen</font>
+                        echo "<div class='message'><font size='2' color='red'><b>! </b>Kein Datensatz gefunden, bitte erneut versuchen</font></div>
                         </body></html>";
                         break;
                     }
-                    echo "<br>";
+                    // else echo dummy
+                    else {
+                        echo "<div class='message'><font size='1' color='white'>_</font></div>";  
+                    }
                     self::renderShowTable($data);
                     break; // end 'show'
                 case 'edit':
                     // create html
                     self::renderMenu();
-                    echo "<br><font color='red' size='3'>Datensatz bearbeiten:</font><br>";
+                    echo "<div class='message'><font color='white' size='1'>_</font></div>";
                     self::renderEditTable($data);                
                     echo "</body></html>";
                     break; // end 'edit'
                 case 'editFailed':
                     // create html
                     self::renderMenu();
-                    echo "<font size='2' color='red'><b>! </b>Zum Bearbeiten bitte nur einen Datensatz auswählen</font><br>";
+                    echo "<div class='message'><font size='2' color='red'><b>! </b>Zum Bearbeiten bitte nur einen Datensatz auswählen</font></div>";
                     self::renderShowTable($data);                
                     echo "</body></html>";
                     break; // end 'editfailed'
                 case 'nothingChoosed':
                     // create html
                     self::renderMenu();
-                    echo "<font size='2' color='red'><b>! </b>Bitte Datensatz auswählen</font><br>";
+                    echo "<div class='message'><font size='2' color='red'><b>! </b>Bitte Datensatz auswählen</font></div>";
                     self::renderShowTable($data);                
                     echo "</body></html>";
-                    break; // end 'editfailed
+                    break; // end 'nothingChoosed
+                case 'noActionChoosed':
+                    // create html
+                    self::renderMenu();
+                    echo "<div class='message'><font size='2' color='red'><b>! </b>Bitte Aktion auswählen</font></div>";
+                    self::renderShowTable($data);                
+                    echo "</body></html>";
+                    break; // end 'noActionChoosed
                 case 'insert':
                     // create html
                     self::renderMenu();
-                    echo "<br><font color='red' size='3'>Datensatz einfügen:</font><br>";
+                    echo "<div class='message'><font color='white' size='1'>_</font></div>";
                     self::renderInsertTable();
                     echo "</body></html>";
                     break; // end 'insert'
                 case 'duplicated':
                     // create html
                     self::renderMenu();
-                    echo "<font size='2' color='red'><b>! </b>Der Datensatz ist schon vorhanden</font><br>";
+                    echo "<div class='message'><font size='2' color='red'><b>! </b>Der Datensatz ist schon vorhanden</font></div>";
                     self::renderInsertTable();
                     echo "</body></html>";
-                    break; // end 'insert'
+                    break; // end 'duplicated'
                 case 'supposedDuplicated':
                     // create html
                     self::renderMenu();
-                    echo "<font size='2' color='red'><b>! </b>Es wurden vermeintliche Duplikate gefunden</font><br>";
+                    echo "<div class='message'><font size='2' color='red'><b>! </b>Es wurden vermeintliche Duplikate gefunden</font></div>";
                     self::renderValidateTable($data);
                     echo "</body></html>";
                     break; // end 'duplicated'
                 case 'saved':
                     // create html
                     self::renderMenu();
-                    echo "<font size='2' color='red'><b>! </b>Der Datensatz wurde gespeichert</font><br>";
+                    echo "<div class='message'><font size='2' color='red'><b>! </b>Der Datensatz wurde gespeichert</font></div>";
                     self::renderShowTable($data);
                     break; // end saved
                 case 'delete':
                     // create html
                     self::renderMenu();
-                    echo "<br><font color='red' size='3'>Sie beabsichtigen folgende Datensätze zu löschen:</font><br>
-                                <font size='2'>(Zum Löschen bitte unten bestätigen)</font><br><br>";
+                    echo "<div class='message'><font color='red' size='2'><b>! </b>Sie beabsichtigen folgende Datensätze zu löschen:</font><br></div>";
                     self::renderDeleteTable($data);
                     echo "</body></html>";
-                    break; // end 'show'
+                    break; // end 'delete'
                 case 'deleted':
                     // create html
                     self::renderMenu();
-                    echo "<font size='2' color='red'><b>! </b>Der Datensatz wurde gelöscht</font><br>";
+                    echo "<div class='message'><font size='2' color='red'><b>! </b>Der Datensatz wurde gelöscht</font></div>";
                     self::renderShowTable($data);
-                    break; // end deleted                
+                    break; // end deleted
+                case 'export':
+                    // create html
+                    self::renderMenu();
+                    echo "<div class='message'><font size='2' color='red'><b>! </b>Die Datensätze wurden exportiert</font></div>";
+                    self::renderShowTable($data);
+                    break; // end export
                 default:
                     self::renderMenu();
                     echo "</body></html>";
@@ -124,7 +150,7 @@
         
         */    
         public function renderShowTable($data) {
-            echo "<form method='GET'><div class='actionTableCont'><table class='mytable'>
+            echo "<div class='actionTableCont'><form method='GET'><table class='mytable'>
                                     <th class='default'>X</th>
                                     <th class='default'>ID</th>
                                     <th class='default'>VORNAME</th>
@@ -173,21 +199,25 @@
                                         }
                                         echo    "</tr>";
                                     }
-                    echo
-                               "</table>
-                                <div class='arrow'><img src='eckpfeil.gif'></div>
-                                <div class='actionFormLeft'>
-                                    <select class='action' name='action'>
-                                        <option></option>
-                                        <option>Bearbeiten</option>
-                                        <option>Entfernen</option>
-                                    </select>
-                                    <input type='submit' class='actionButton' name='editdelete' value='Go'>
-                                </div></div></form>
-                            </body>
-                        </html>";
-            
-            
+                                    echo    "<tr>";
+                                    echo   "<td class='default'>
+                                                <input id='checkall' type='checkbox' name='chooseAll' onclick='checkedall()'>
+                                            </td>
+                                            <td class='mycell'>Alle</td>";
+                                    echo
+                                        "</table>
+                                         <div class='arrow'><img src='eckpfeil.gif'></div>
+                                         <div class='actionFormLeft'>
+                                             <select class='action' name='action'>
+                                                 <option></option>
+                                                 <option>Bearbeiten</option>
+                                                 <option>Entfernen</option>
+                                                 <option>CSV Export</option>
+                                             </select>
+                                             <input type='submit' class='actionButton' name='editdelete' value='Go'>
+                                         </div></form></div>
+                                     </body>
+                                 </html>";
         }
         
         //******************************************************************************************
@@ -220,37 +250,41 @@
                     // choose background in fact of status
                     switch ($actual_dataset['status']) {
                         case 'FINAL (R)':
-                            echo "<td bgcolor='red'>".$oneentry."</td>";
+                            echo "<td class='mycell' bgcolor='red'>".$oneentry."</td>";
                             break;
                         case 'FINAL (G)':
-                            echo "<td bgcolor='lime'>".$oneentry."</td>";
+                            echo "<td class='mycell' bgcolor='lime'>".$oneentry."</td>";
                             break;                                               
                         case 'PENDING (O)':
-                            echo "<td bgcolor='orange'>".$oneentry."</td>";
+                            echo "<td class='mycell' bgcolor='orange'>".$oneentry."</td>";
                             break;
                         case 'PENDING (V)':
-                            echo "<td bgcolor='plum'>".$oneentry."</td>";
+                            echo "<td class='mycell' bgcolor='plum'>".$oneentry."</td>";
                             break;
                         case 'FORWARDED':
-                            echo "<td bgcolor='yellow'>".$oneentry."</td>";
+                            echo "<td class='mycell' bgcolor='yellow'>".$oneentry."</td>";
                             break;
                         case 'POOL':
-                            echo "<td bgcolor='cyan'>".$oneentry."</td>";
+                            echo "<td class='mycell' bgcolor='cyan'>".$oneentry."</td>";
                             break;
                         case 'TERMIN':
-                            echo "<td bgcolor='greenyellow'>".$oneentry."</td>";
+                            echo "<td class='mycell' bgcolor='greenyellow'>".$oneentry."</td>";
                             break;
                         default:
-                            echo "<td class='default'>".$oneentry."</td>";
+                            echo "<td class='mycell' class='default'>".$oneentry."</td>";
                     }
                 }
                 echo    "</tr>";
             }
             echo
             "</table>
-            <div class='actionForm'>
-            <input type='submit' class='backButton' name='back' value='Zurück'>                      
-            <input type='submit' name='confirmDelIDNEU' value='Löschen'></div></div>
+                <div class='actionFormLeft'>
+                    <input type='submit' class='backButton' name='back' value='Zurück'>
+                </div>
+                <div class='actionFormRight'>
+                    <input type='submit' class='actionButton' name='confirmDelIDNEU' value='Löschen'>
+                </div>
+            </div>
             </form>";
         }
         
@@ -275,11 +309,11 @@
                     echo "<td  class='editinsertLeftAlign'>".self::translate($keys[$key])."</td>";
                     switch ($keys[$key]) {
                         case 'id':
-                            echo "<td><input name='".$keys[$key]."' value='".$oneentry."' readonly='readonly'></td>";
+                            echo "<td class='editinsertRightAlign'><input name='".$keys[$key]."' value='".$oneentry."' readonly='readonly'></td>";
                             $key++;
                             break;
                         case 'job':
-                            echo "<td>
+                            echo "<td class='editinsertRightAlign'>
                             <select name='job'>";
                             // switch different input cases for status
                             switch ($oneentry) {
@@ -308,7 +342,7 @@
                             $key++;
                             break; 
                         case 'status':
-                            echo "<td>
+                            echo "<td class='editinsertRightAlign'>
                             <select name='status'>";
                             // switch different input cases for status
                             switch ($oneentry) {
@@ -342,31 +376,31 @@
                             $key++;
                             break;
                         case 'first_contact_at':
-                            echo "<td><input id='first_contact_at' name='".$keys[$key]."' value='".$oneentry."'></td>";
+                            echo "<td class='editinsertRightAlign'><input id='first_contact_at' name='".$keys[$key]."' value='".$oneentry."'></td>";
                             $key++;
                             break;
                         case 'last_update':
-                            echo "<td><input id='last_update' name='".$keys[$key]."' value='".$oneentry."'></td>";
+                            echo "<td class='editinsertRightAlign'><input id='last_update' name='".$keys[$key]."' value='".$oneentry."'></td>";
                             $key++;
                             break;
                         case 'infos':
-                            echo "<td><textarea class='infos' name='".$keys[$key]."'>".$oneentry."</textarea></td>";
+                            echo "<td class='editinsertRightAlign'><textarea class='infos' name='".$keys[$key]."'>".$oneentry."</textarea></td>";
                             break;
                             $key++;
                         default:
-                            echo "<td><input name='".$keys[$key]."' value='".$oneentry."'></td>";
+                            echo "<td class='editinsertRightAlign'><input name='".$keys[$key]."' value='".$oneentry."'></td>";
                             $key++;
                     } // switch key
                     echo "</tr>";
                 } // foreach
                 echo "<tr>
                         <td class='editinsertLeftAlign'><b>DATENSATZ SPEICHERN<b></td>
-                        <td>
-                          <input class='editButton' type='submit' name='saveEdited' value='".$actual_dataset['id']."'></form>
+                        <td class='editinsertRightAlign'>
+                          <input class='actionButton' type='submit' name='saveEdited' value='Go'></form>
                         </td>  ";
                 echo "</table><br>";
             } // foreach
-            echo "<form method='GET'><input class='backButton' type='submit' name='back' value='Zurück'></form>";
+            echo "<form method='GET'><br><input class='backButton' type='submit' name='back' value='Zurück'></form>";
         }
         
         //******************************************************************************************
@@ -379,14 +413,14 @@
                 <form method='GET'>
                     <tr>
                         <td class='editinsertLeftAlign'>VORNAME</td>
-                        <td><input name='firstname'></td>
+                        <td class='editinsertRightAlign'><input name='firstname'></td>
                     </tr>
                      <tr>
                         <td class='editinsertLeftAlign'>NAME</td>
-                        <td><input name='name'></td>
+                        <td class='editinsertRightAlign'><input name='name'></td>
                      <tr>
                         <td class='editinsertLeftAlign'>TÄTIGKEIT</td>
-                        <td>
+                        <td class='editinsertRightAlign'>
                             <select name='job'>
                                 <option>undefined</option>
                                 <option>SysAd</option>
@@ -399,7 +433,7 @@
                     </tr>
                      <tr>
                         <td class='editinsertLeftAlign'>STATUS</td>
-                        <td>
+                        <td class='editinsertRightAlign'>
                             <select name='status'>
                                 <option>undefined</option>    
                                 <option>FINAL (G)</option>
@@ -414,35 +448,35 @@
                     </tr>
                     <tr>
                         <td class='editinsertLeftAlign'>XING PROFIL</td>
-                        <td><input id='xing_profile' name='xing_profile'></td>
+                        <td class='editinsertRightAlign'><input id='xing_profile' name='xing_profile'></td>
                     </tr>
                      <tr>
                         <td class='editinsertLeftAlign'>ERSTER KONTAKT AM</td>
-                        <td><input id='first_contact_at' name='first_contact_at'></td>
+                        <td class='editinsertRightAlign'><input id='first_contact_at' name='first_contact_at'></td>
                     </tr>
                      <tr>
                         <td class='editinsertLeftAlign'>ERSTER KONTAKT ÜBER PROFIL</td>
-                        <td><input name='first_contact_over_profile'></td>
+                        <td class='editinsertRightAlign'><input name='first_contact_over_profile'></td>
                     </tr>
                      <tr>
                         <td class='editinsertLeftAlign'>ERSTER KONTAKT ÜBER MA</td>
-                        <td><input name='first_contact_from'></td>
+                        <td class='editinsertRightAlign'><input name='first_contact_from'></td>
                     </tr>
                     <tr>
                         <td class='editinsertLeftAlign'>LETZTES UPDATE</td>
-                        <td><input id='last_update' name='last_update'></td>
+                        <td class='editinsertRightAlign'><input id='last_update' name='last_update'></td>
                     </tr>
                     <tr>
                     </tr>
                         <td class='editinsertLeftAlign'>INFOS</td>
-                        <td><textarea class='infos' name='infos'></textarea></td>
+                        <td class='editinsertRightAlign'><textarea class='infos' name='infos'></textarea></td>
                     </tr>
                     <tr>
                     </tr>
                         <td class='editinsertLeftAlign'><b>DATENSATZ SPEICHERN</b></td>
-                        <td><input class='editButton' type='submit' name='saveNew'></td>
+                        <td class='editinsertRightAlign'><input type='submit' class='actionButton' name='saveNew' value='Go'></td>
                         </form>
-                </table><br><form method='GET'><input class='backButton' type='submit' name='back' value='Zurück'></form>";
+                </table><br><form method='GET'><br><input class='backButton' type='submit' name='back' value='Zurück'></form>";
         }
         
                 //******************************************************************************************
@@ -511,7 +545,7 @@
                                         <input type='submit' class='actionButton' name='editdelete' value='Bearbeiten'>
                                     </div>
                                     <div class='actionFormRight'>
-                                        <font size='2' color='red'>Neuen Datensatz</font>
+                                        <font size='2' color='red'><b>! </b>Neuen Datensatz</font>
                                         <input type='submit' class='actionButton' name='confirmInsert' value='Speichern'>
                                     </div></div></form>
                             </body>
@@ -523,11 +557,15 @@
         // renders the main menu
         public function renderMenu() {
             echo
-                       "  <form method='GET'>
+                       "<div class='menu'>
+                        <span class='menu1'>
+                            <form method='GET'>
+                            <input class='menu' type='submit' name='insert' value='Datensatz erstellen'>
                             <input class='menu' type='submit' name='showall' value='Alle Datensätze anzeigen'>
-                            <input class='menu' type='submit' name='insert' value='Neuen Datensatz erstellen'>
-                            <input class='menu' type='submit' name='deleteview' value='Anzeigefeld leeren'><br>
-                        </form><form method='GET'>
+                            </form>
+                        </span>
+                        <span class='menu2'>
+                        <form method='GET'>
                             <font size='2'>Name: </font><input name='searchterm_name'>
                             <font size='2'>Tätigkeit: </font><select class='search' name='searchterm_job' size='1'>
                                 <option></option>
@@ -552,7 +590,9 @@
                                 <option>POOL</option>
                             </select>
                             <input type='submit' name='search' value='Suchen'><br>
-                        </form>";  
+                        </form>
+                        </span
+                        </div>";  
         }
         
         //******************************************************************************************

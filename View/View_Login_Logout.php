@@ -123,7 +123,7 @@
                     <body>
                         <font size='7' style='font-family:Helvetica'>
                             XING KONTAKTMANAGER
-                        </font><br><br>";
+                        </font><br>";
         }
         
     }

@@ -358,6 +358,50 @@
         //**********************************************************************************
         
         /*
+          Puts selected Data into CSV file for following import to Excel
+        */
+        
+        public function createCSV($ids) {
+         
+            $datei = fopen("export.csv", 'w');
+            fwrite($datei, '"ID",
+                            "VORNAME",
+                            "NAME",
+                            "TäTIGKEIT",
+                            "STATUS",
+                            "XING PROFIL",
+                            "ERSTER KONTAKT AM",
+                            "ERSTER KONTAKT ÜBER PROFIL",
+                            "ERSTER KONTAKT ÜBER MA",
+                            "LETZTES UPDATE",
+                            "INFOS"'.'\n');
+             fclose($datei);
+            
+            /* foreach(self::filterDatasetID($ids) as $actual_dataset) {
+                           
+                fwrite($datei, '"'.$actual_dataset[0].'",');
+                fwrite($datei, '"'.$actual_dataset[1].'",');
+                fwrite($datei, '"'.$actual_dataset[2].'",'); 
+                fwrite($datei, '"'.$actual_dataset[3].'",');
+                fwrite($datei, '"'.$actual_dataset[4].'",');
+                fwrite($datei, '"'.$actual_dataset[5].'",');
+                fwrite($datei, '"'.$actual_dataset[6].'",');
+                fwrite($datei, '"'.$actual_dataset[7].'",');
+                fwrite($datei, '"'.$actual_dataset[8].'",');
+                fwrite($datei, '"'.$actual_dataset[9].'",');
+                fwrite($datei, '"'.$actual_dataset[10].'"'.'\n'); 
+            } */
+            
+            //header('Content-type: text/plain');
+            //header('Content-Disposition: attachment; filename="export.csv"');
+           
+            
+        }
+        
+        
+        //**********************************************************************************
+        
+        /*
           little helper function to compare strings with "umlauts"
           turns all chars in term to lower and validate strings in utf8
         */
