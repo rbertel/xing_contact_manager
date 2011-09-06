@@ -362,40 +362,37 @@
         */
         
         public function createCSV($ids) {
-         
+                        
             $datei = fopen("export.csv", 'w');
-            fwrite($datei, '"ID",
-                            "VORNAME",
-                            "NAME",
-                            "TäTIGKEIT",
-                            "STATUS",
-                            "XING PROFIL",
-                            "ERSTER KONTAKT AM",
-                            "ERSTER KONTAKT ÜBER PROFIL",
-                            "ERSTER KONTAKT ÜBER MA",
-                            "LETZTES UPDATE",
-                            "INFOS"'.'\n');
-             fclose($datei);
+            fwrite($datei, '"ID","VORNAME","NAME","TÄTIGKEIT","STATUS","XING PROFIL","ERSTER KONTAKT AM","ERSTER KONTAKT ÜBER PROFIL","ERSTER KONTAKT ÜBER MA","LETZTES UPDATE","INFOS"');
+                        
+            foreach(self::filterDatasetID($ids) as $actual_dataset) {
+                
+                fwrite($datei, "\r\n");           
+                fwrite($datei, '"'.$actual_dataset['id'].'",');
+                fwrite($datei, '"'.$actual_dataset['firstname'].'",');
+                fwrite($datei, '"'.$actual_dataset['name'].'",'); 
+                fwrite($datei, '"'.$actual_dataset['job'].'",');
+                fwrite($datei, '"'.$actual_dataset['status'].'",');
+                fwrite($datei, '"'.$actual_dataset['xing_profile'].'",');
+                fwrite($datei, '"'.$actual_dataset['first_contact_at'].'",');
+                fwrite($datei, '"'.$actual_dataset['first_contact_over_profile'].'",');
+                fwrite($datei, '"'.$actual_dataset['first_contact_from'].'",');
+                fwrite($datei, '"'.$actual_dataset['last_update'].'",');
+                fwrite($datei, '"'.$actual_dataset['infos'].'"'); 
+            }
             
-            /* foreach(self::filterDatasetID($ids) as $actual_dataset) {
-                           
-                fwrite($datei, '"'.$actual_dataset[0].'",');
-                fwrite($datei, '"'.$actual_dataset[1].'",');
-                fwrite($datei, '"'.$actual_dataset[2].'",'); 
-                fwrite($datei, '"'.$actual_dataset[3].'",');
-                fwrite($datei, '"'.$actual_dataset[4].'",');
-                fwrite($datei, '"'.$actual_dataset[5].'",');
-                fwrite($datei, '"'.$actual_dataset[6].'",');
-                fwrite($datei, '"'.$actual_dataset[7].'",');
-                fwrite($datei, '"'.$actual_dataset[8].'",');
-                fwrite($datei, '"'.$actual_dataset[9].'",');
-                fwrite($datei, '"'.$actual_dataset[10].'"'.'\n'); 
-            } */
+            fclose($datei);
             
-            //header('Content-type: text/plain');
-            //header('Content-Disposition: attachment; filename="export.csv"');
-           
-            
+            $dl_datei = "export.csv";
+                        
+            header('Content-type: text/plain');
+            header('Content-Length:'.filesize($dl_datei));
+            header('Content-Disposition: attachment; filename='.$dl_datei);
+            readfile('export.csv');
+            unlink('export.csv');
+            exit();
+        
         }
         
         

@@ -141,6 +141,7 @@
                                                              $_GET['first_contact_from'],
                                                              $_GET['last_update'],
                                                              $_GET['infos']);
+                        // if there are supposed duplicates in database
                         } else {
                             if (!is_null($this->model_home->getDuplicates())) {
                                 $_SESSION['mode_2'] = 'supposedDuplicated';
@@ -222,10 +223,10 @@
                         }
                                             
                         // if user choosed edit 
-                        elseif($_GET['action'] == "Bearbeiten") {
-                            $_SESSION['mode_2'] = 'editFailed';
+                        elseif($_GET['action'] == "Bearbeiten" or $_GET['editdelete'] == "Alten Datensatz Bearbeiten") {
                             // if user choose more than one dataset, go back to old view
                             if (count($_GET['choosed'])>1) {
+                                 $_SESSION['mode_2'] = 'editFailed';
                                 $this->view_login_logout->display($_SESSION['mode_3']);
                                 // check previous view and reload
                                 if (end($_SESSION['lastview']) == 'showall') {

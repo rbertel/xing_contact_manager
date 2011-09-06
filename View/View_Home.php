@@ -39,8 +39,9 @@
                     self::renderMenu();
                     // if no data is there to show, render little info and break
                     if ($data == NULL) {
-                        echo "<div class='message'><font size='2' color='red'><b>! </b>Kein Datensatz gefunden, bitte erneut versuchen</font></div>
-                        </body></html>";
+                        echo "<div class='message'><font size='2' color='red'><b>! </b>Kein Datensatz gefunden, bitte erneut versuchen</font></div>";
+                        self::renderTableHeader();
+                        echo "</body></html>";
                         break;
                     }
                     // else echo dummy
@@ -125,6 +126,8 @@
                     break; // end export
                 default:
                     self::renderMenu();
+                    echo "<div class='message'><font color='white' size='1'>_</font></div>";
+                    self::renderTableHeader();
                     echo "</body></html>";
             } // end switch
         }
@@ -271,16 +274,13 @@
                             echo "<td class='mycell' bgcolor='greenyellow'>".$oneentry."</td>";
                             break;
                         default:
-                            echo "<td class='mycell' class='default'>".$oneentry."</td>";
+                            echo "<td class='default'>".$oneentry."</td>";
                     }
                 }
                 echo    "</tr>";
             }
             echo
             "</table>
-                <div class='actionFormLeft'>
-                    <input type='submit' class='backButton' name='back' value='Zurück'>
-                </div>
                 <div class='actionFormRight'>
                     <input type='submit' class='actionButton' name='confirmDelIDNEU' value='Löschen'>
                 </div>
@@ -301,19 +301,19 @@
             foreach($data as $actual_dataset) {
                 $keys = array_keys($actual_dataset);
                 $key = 0;
-                echo "<table class='edittable'>";
+                echo "<div class='actionTableCont'><table class='edittable'>";
                 echo "<form method='GET'>";
                 foreach ($actual_dataset as $oneentry) {
                     // switch different input cases generally
                     echo "<tr>";
-                    echo "<td  class='editinsertLeftAlign'>".self::translate($keys[$key])."</td>";
+                    echo "<td  class='editinsertRightAlign'>".self::translate($keys[$key])."</td>";
                     switch ($keys[$key]) {
                         case 'id':
-                            echo "<td class='editinsertRightAlign'><input name='".$keys[$key]."' value='".$oneentry."' readonly='readonly'></td>";
+                            echo "<td class='editinsertLeftAlign'><input name='".$keys[$key]."' value='".$oneentry."' readonly='readonly'></td>";
                             $key++;
                             break;
                         case 'job':
-                            echo "<td class='editinsertRightAlign'>
+                            echo "<td class='editinsertLeftAlign'>
                             <select name='job'>";
                             // switch different input cases for status
                             switch ($oneentry) {
@@ -342,7 +342,7 @@
                             $key++;
                             break; 
                         case 'status':
-                            echo "<td class='editinsertRightAlign'>
+                            echo "<td class='editinsertLeftAlign'>
                             <select name='status'>";
                             // switch different input cases for status
                             switch ($oneentry) {
@@ -376,31 +376,30 @@
                             $key++;
                             break;
                         case 'first_contact_at':
-                            echo "<td class='editinsertRightAlign'><input id='first_contact_at' name='".$keys[$key]."' value='".$oneentry."'></td>";
+                            echo "<td class='editinsertLeftAlign'><input id='first_contact_at' name='".$keys[$key]."' value='".$oneentry."'></td>";
                             $key++;
                             break;
                         case 'last_update':
-                            echo "<td class='editinsertRightAlign'><input id='last_update' name='".$keys[$key]."' value='".$oneentry."'></td>";
+                            echo "<td class='editinsertLeftAlign'><input id='last_update' name='".$keys[$key]."' value='".$oneentry."'></td>";
                             $key++;
                             break;
                         case 'infos':
-                            echo "<td class='editinsertRightAlign'><textarea class='infos' name='".$keys[$key]."'>".$oneentry."</textarea></td>";
+                            echo "<td class='editinsertLeftAlign'><textarea class='infos' name='".$keys[$key]."'>".$oneentry."</textarea></td>";
                             break;
                             $key++;
                         default:
-                            echo "<td class='editinsertRightAlign'><input name='".$keys[$key]."' value='".$oneentry."'></td>";
+                            echo "<td class='editinsertLeftAlign'><input name='".$keys[$key]."' value='".$oneentry."'></td>";
                             $key++;
                     } // switch key
                     echo "</tr>";
                 } // foreach
                 echo "<tr>
-                        <td class='editinsertLeftAlign'><b>DATENSATZ SPEICHERN<b></td>
-                        <td class='editinsertRightAlign'>
+                        <td class='editinsertRightAlign'><b>DATENSATZ SPEICHERN<b></td>
+                        <td class='editinsertLeftAlign'>
                           <input class='actionButton' type='submit' name='saveEdited' value='Go'></form>
                         </td>  ";
-                echo "</table><br>";
+                echo "</table></div>";
             } // foreach
-            echo "<form method='GET'><br><input class='backButton' type='submit' name='back' value='Zurück'></form>";
         }
         
         //******************************************************************************************
@@ -409,18 +408,18 @@
         
         public function renderInsertTable() {
             echo
-            "<table class='edittable'>
+            "<div class='actionTableCont'><table class='edittable'>
                 <form method='GET'>
                     <tr>
-                        <td class='editinsertLeftAlign'>VORNAME</td>
-                        <td class='editinsertRightAlign'><input name='firstname'></td>
+                        <td class='editinsertRightAlign'>VORNAME</td>
+                        <td class='editinsertLeftAlign'><input name='firstname'></td>
                     </tr>
                      <tr>
-                        <td class='editinsertLeftAlign'>NAME</td>
-                        <td class='editinsertRightAlign'><input name='name'></td>
+                        <td class='editinsertRightAlign'>NAME</td>
+                        <td class='editinsertLeftAlign'><input name='name'></td>
                      <tr>
-                        <td class='editinsertLeftAlign'>TÄTIGKEIT</td>
-                        <td class='editinsertRightAlign'>
+                        <td class='editinsertRightAlign'>TÄTIGKEIT</td>
+                        <td class='editinsertLeftAlign'>
                             <select name='job'>
                                 <option>undefined</option>
                                 <option>SysAd</option>
@@ -432,8 +431,8 @@
                         </td>
                     </tr>
                      <tr>
-                        <td class='editinsertLeftAlign'>STATUS</td>
-                        <td class='editinsertRightAlign'>
+                        <td class='editinsertRightAlign'>STATUS</td>
+                        <td class='editinsertLeftAlign'>
                             <select name='status'>
                                 <option>undefined</option>    
                                 <option>FINAL (G)</option>
@@ -447,36 +446,36 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class='editinsertLeftAlign'>XING PROFIL</td>
-                        <td class='editinsertRightAlign'><input id='xing_profile' name='xing_profile'></td>
+                        <td class='editinsertRightAlign'>XING PROFIL</td>
+                        <td class='editinsertLeftAlign'><input id='xing_profile' name='xing_profile'></td>
                     </tr>
                      <tr>
-                        <td class='editinsertLeftAlign'>ERSTER KONTAKT AM</td>
-                        <td class='editinsertRightAlign'><input id='first_contact_at' name='first_contact_at'></td>
+                        <td class='editinsertRightAlign'>ERSTER KONTAKT AM</td>
+                        <td class='editinsertLeftAlign'><input id='first_contact_at' name='first_contact_at'></td>
                     </tr>
                      <tr>
-                        <td class='editinsertLeftAlign'>ERSTER KONTAKT ÜBER PROFIL</td>
-                        <td class='editinsertRightAlign'><input name='first_contact_over_profile'></td>
+                        <td class='editinsertRightAlign'>ERSTER KONTAKT ÜBER PROFIL</td>
+                        <td class='editinsertLeftAlign'><input name='first_contact_over_profile'></td>
                     </tr>
                      <tr>
-                        <td class='editinsertLeftAlign'>ERSTER KONTAKT ÜBER MA</td>
-                        <td class='editinsertRightAlign'><input name='first_contact_from'></td>
+                        <td class='editinsertRightAlign'>ERSTER KONTAKT ÜBER MA</td>
+                        <td class='editinsertLeftAlign'><input name='first_contact_from'></td>
                     </tr>
                     <tr>
-                        <td class='editinsertLeftAlign'>LETZTES UPDATE</td>
-                        <td class='editinsertRightAlign'><input id='last_update' name='last_update'></td>
-                    </tr>
-                    <tr>
-                    </tr>
-                        <td class='editinsertLeftAlign'>INFOS</td>
-                        <td class='editinsertRightAlign'><textarea class='infos' name='infos'></textarea></td>
+                        <td class='editinsertRightAlign'>LETZTES UPDATE</td>
+                        <td class='editinsertLeftAlign'><input id='last_update' name='last_update'></td>
                     </tr>
                     <tr>
                     </tr>
-                        <td class='editinsertLeftAlign'><b>DATENSATZ SPEICHERN</b></td>
-                        <td class='editinsertRightAlign'><input type='submit' class='actionButton' name='saveNew' value='Go'></td>
+                        <td class='editinsertRightAlign'>INFOS</td>
+                        <td class='editinsertLeftAlign'><textarea class='infos' name='infos'></textarea></td>
+                    </tr>
+                    <tr>
+                    </tr>
+                        <td class='editinsertRightAlign'><b>DATENSATZ SPEICHERN</b></td>
+                        <td class='editinsertLeftAlign'><input type='submit' class='actionButton' name='saveNew' value='Go'></td>
                         </form>
-                </table><br><form method='GET'><br><input class='backButton' type='submit' name='back' value='Zurück'></form>";
+                </table></div>";
         }
         
                 //******************************************************************************************
@@ -542,11 +541,10 @@
                                "</table>
                                     <div class='arrow'><img src='eckpfeil.gif'></div>
                                     <div class='actionFormLeft'>
-                                        <input type='submit' class='actionButton' name='editdelete' value='Bearbeiten'>
+                                        <input type='submit' class='actionButton' name='editdelete' value='Alten Datensatz Bearbeiten'>
                                     </div>
                                     <div class='actionFormRight'>
-                                        <font size='2' color='red'><b>! </b>Neuen Datensatz</font>
-                                        <input type='submit' class='actionButton' name='confirmInsert' value='Speichern'>
+                                        <input type='submit' class='actionButton' name='confirmInsert' value='Neuen Datensatz Speichern'>
                                     </div></div></form>
                             </body>
                         </html>"; 
@@ -557,7 +555,7 @@
         // renders the main menu
         public function renderMenu() {
             echo
-                       "<div class='menu'>
+                       "<div class='menu'><!--BEGIN div class 'menu'-->
                         <span class='menu1'>
                             <form method='GET'>
                             <input class='menu' type='submit' name='insert' value='Datensatz erstellen'>
@@ -591,8 +589,27 @@
                             </select>
                             <input type='submit' name='search' value='Suchen'><br>
                         </form>
-                        </span
-                        </div>";  
+                        </span>
+                        </div><!--END div class 'menu'-->
+                        </div><!--END div class 'header'-->"; // 2nd "</div>" --> end class "header"  
+        }
+        
+         //*****************************************************************************************
+                // renders ONLY the table header
+        public function renderTableHeader() {
+            echo "<div class='actionTableCont'><table class='mytable'>
+                <th class='default'>X</th>
+                <th class='default'>ID</th>
+                <th class='default'>VORNAME</th>
+                <th class='default'>NAME</th>
+                <th class='default'>TÄTIGKEIT</th>
+                <th class='default'>STATUS</th>
+                <th class='default'>XING PROFIL</th>
+                <th class='default'>ERSTER KONTAKT AM</th>
+                <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
+                <th class='default'>ERSTER KONTAKT ÜBER MA</th>
+                <th class='default'>LETZTES UPDATE</th>
+                <th class='default'>INFOS</th></table></div>";  
         }
         
         //******************************************************************************************
@@ -627,6 +644,9 @@
     }
     
     
+    /*                 <div class='actionFormLeft'>
+                    <input type='submit' class='backButton' name='back' value='Zurück'>
+                </div>*/
 
 
 ?>

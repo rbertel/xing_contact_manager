@@ -1,4 +1,4 @@
-table.mytable { font-size: 12; font-family: helvetica; width:100%; }
+table.mytable { font-size: 12; font-family: helvetica; width:1400px; }
 table.edittable { font-size: 12; font-family: helvetica; width:1400px; text-align: right; margin-top: 10px}
 td.mycell {padding-left:5; padding-right:5}
 td.delcell {background: #D2D2D0; text-align:left;}
@@ -11,20 +11,25 @@ th.default {background: #D2D2D0; padding-left:5; padding-right:5}
 td.login{text-align:right}
 select.search{width:120px;}
 select.action{font-size:12px;}
+input.log {font-size:12px;}
 input.actionButton {font-size:12px;}
 input.actionButton1 {font-size:10px;}
 input.editButton {font-size:10px; height:20px; width:60px}
 input.delButton {font-size:0px; height:18px; width:18px}
 input.backButton {font-size:10px; margin-left:5px}
 input.menu {width:200px}
-input.logoutButton {position: absolute; top: 10px; right: 10px; font-size:10px}
+input.logoutButton {position: absolute; top: 8px; right: 0px; font-size:10px}
 textarea.infos {height:200px; width:100%}
+
+div.header {position:fixed; top:0; background:white; height:160px; width:1400px}
+span.headline {background:white; height:50px; width:600px; text-align: left}
+span.logFormular {background:red; margin-left:20px; width:200px; text-align: right}
 div.menu {width:1400px; height: 50px; margin-top:40px}
 span.menu1 {float:left; width:420px; text-align: left}
 span.menu2 {width:700px; margin-left:20px; text-align: right}
-div.message {margin-top:20px; height:10px;}
-div.tableCont{width:100%; overflow:auto }
-div.actionTableCont{background: #FFFFFF; width:1400px; text-align: left; margin-top: 20px}
+div.message {top:160; left:10; position:fixed; background:white; height:20px; width:1398px}
+
+div.actionTableCont{background: #FFFFFF; width:1400px; text-align: left; margin-top: 180px; overflow:auto}
 div.actionForm {margin-top:10px }
 div.arrow {float: left; background: #BBBBBB; margin-top:10px; margin-left:12px;}
 div.actionFormLeft {float: left; margin-top:8px; width:300px; text-align: left }
