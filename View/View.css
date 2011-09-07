@@ -1,9 +1,12 @@
-table.mytable { font-size: 12; font-family: helvetica; width:1400px; }
+table.mytable {font-size: 12; font-family: helvetica; width:1400px; background:black}
 table.edittable { font-size: 12; font-family: helvetica; width:1400px; text-align: right; margin-top: 10px}
-td.mycell {padding-left:5; padding-right:5}
+td.mycell {padding-left:5; padding-right:5; height: 26}
 td.delcell {background: #D2D2D0; text-align:left;}
-td.default{background: #D2D2D0; padding-left:5; padding-right:5}
-td.newData{background: #873549; padding-left:5; padding-right:5}
+td.default{background: #D2D2D0; padding-left:5; padding-right:5; height: 26}
+td.lastrow{background: #D2D2D0; padding-left:5; padding-right:5; height: 34}
+td.normal_white{background: #eeeeee; padding-left:5; padding-right:5; height: 26}
+td.normal_grey{background: #FFFFFF; padding-left:5; padding-right:5; height: 26}
+td.newData{background: #873549; padding-left:5; padding-right:5; height: 26}}
 th.default {background: #D2D2D0; padding-left:5; padding-right:5}
 td.editinsertLeftAlign {background: #D2D2D0; padding-left:5; text-align:left}
 td.editinsertRightAlign {background: #D2D2D0; text-align:right}
@@ -22,16 +25,17 @@ input.logoutButton {position: absolute; top: 8px; right: 0px; font-size:10px}
 textarea.infos {height:200px; width:100%}
 
 div.header {position:fixed; top:0; background:white; height:160px; width:1400px}
-span.headline {background:white; height:50px; width:600px; text-align: left}
+span.headline {height:50px; width:1400px; text-align: left; margin-left:2; background:#eeeeee}
 span.logFormular {background:red; margin-left:20px; width:200px; text-align: right}
-div.menu {width:1400px; height: 50px; margin-top:40px}
+div.menu {width:1400px; height: 30px; margin-top:60px}
 span.menu1 {float:left; width:420px; text-align: left}
 span.menu2 {width:700px; margin-left:20px; text-align: right}
-div.message {top:160; left:10; position:fixed; background:white; height:20px; width:1398px}
+div.message {top:160; left:8; position:fixed; background:white; height:20px; width:1400px}
 
 div.actionTableCont{background: #FFFFFF; width:1400px; text-align: left; margin-top: 180px; overflow:auto}
 div.actionForm {margin-top:10px }
 div.arrow {float: left; background: #BBBBBB; margin-top:10px; margin-left:12px;}
 div.actionFormLeft {float: left; margin-top:8px; width:300px; text-align: left }
 div.actionFormRight {float: right; margin-top:8px; width:250px; text-align: right}
+
 body {font-family:helvetica}

@@ -58,7 +58,7 @@
                     if (isset($_GET['username']) && isset($_GET['password'])) {
                         if(self::login()) {
                             $this->view_login_logout->display($_SESSION['mode_3']);
-                            $this->view_home->display($_SESSION['mode_2'], NULL);
+                            $this->view_home->display($_SESSION['mode_2'], NULL, NULL);
                         } else {
                             $this->view_login_logout->display($_SESSION['mode_3']);
                         }
@@ -74,6 +74,7 @@
                         $_SESSION['mode_1'] = 'unlogged';
                         $_SESSION['mode_3'] = 'legally_unlogged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
+                        unset($_SESSION);
                         break;
                     }
                     
@@ -83,7 +84,7 @@
                         $_SESSION['mode_3'] = 'logged';
                         array_push($_SESSION['lastview'], 'showall');
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), NULL);
                         break;
                     }
                 
@@ -93,7 +94,7 @@
                         $_SESSION['mode_3'] = 'logged';
                         array_push($_SESSION['lastview'], array($_GET['searchterm_name'],$_GET['searchterm_job'],$_GET['searchterm_status']));
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($_GET['searchterm_name'],$_GET['searchterm_job'],$_GET['searchterm_status']));
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($_GET['searchterm_name'],$_GET['searchterm_job'],$_GET['searchterm_status']), NULL);
                         break;
                     }
                     
@@ -102,7 +103,7 @@
                         $_SESSION['mode_2'] = 'default';
                         $_SESSION['mode_3'] = 'logged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], NULL);
+                        $this->view_home->display($_SESSION['mode_2'], NULL, NULL);
                         break;
                     }
                     
@@ -111,7 +112,7 @@
                         $_SESSION['mode_2'] = 'insert';
                         $_SESSION['mode_3'] = 'logged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], NULL);
+                        $this->view_home->display($_SESSION['mode_2'], NULL, NULL);
                         break;
                     }
                     
@@ -146,12 +147,12 @@
                             if (!is_null($this->model_home->getDuplicates())) {
                                 $_SESSION['mode_2'] = 'supposedDuplicated';
                                 $this->view_login_logout->display($_SESSION['mode_3']);
-                                $this->view_home->display($_SESSION['mode_2'], array($_SESSION['cacheData'], $this->model_home->getDuplicates()));
+                                $this->view_home->display($_SESSION['mode_2'], array($_SESSION['cacheData'], $this->model_home->getDuplicates()), NULL);
                                 break;
                             } else {
                                 $_SESSION['mode_2'] = 'duplicated';
                                 $this->view_login_logout->display($_SESSION['mode_3']);
-                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), NULL);
                                 break;
                             }
                             
@@ -159,13 +160,13 @@
                         $this->view_login_logout->display($_SESSION['mode_3']);
                         // check previous view and reload 
                         if (end($_SESSION['lastview']) == 'showall') {
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), $this->model_home->messageFromDb);
                         } else {
                             $lastSearchTerms_array; 
                             foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
                                 $lastSearchTerms_array[] = $lastSearchTerms;
                             }
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), $this->model_home->messageFromDb);
                         }
                         break;
                     }
@@ -189,13 +190,13 @@
                         // check previous view and reload
                         $this->view_login_logout->display($_SESSION['mode_3']);
                         if (end($_SESSION['lastview']) == 'showall') {
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), $this->model_home->messageFromDb);
                         } else {
                             $lastSearchTerms_array; 
                             foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
                                 $lastSearchTerms_array[] = $lastSearchTerms;
                             }
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), $this->model_home->messageFromDb);
                         }
                         break;
                         
@@ -211,13 +212,13 @@
                             $this->view_login_logout->display($_SESSION['mode_3']);
                             // check previous view and reload
                             if (end($_SESSION['lastview']) == 'showall') {
-                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), NULL);
                             } else {
                                 $lastSearchTerms_array; 
                                 foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
                                     $lastSearchTerms_array[] = $lastSearchTerms;
                                 }
-                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), NULL);
                             }
                             break;
                         }
@@ -230,20 +231,20 @@
                                 $this->view_login_logout->display($_SESSION['mode_3']);
                                 // check previous view and reload
                                 if (end($_SESSION['lastview']) == 'showall') {
-                                    $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                                    $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), NULL);
                                 } else {
                                     $lastSearchTerms_array; 
                                     foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
                                         $lastSearchTerms_array[] = $lastSearchTerms;
                                     }
-                                    $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                                    $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), NULL);
                                 }
                             }
                             // if user choose one dataset, go to edit view
                             elseif (count($_GET['choosed'])==1) {
                                 $_SESSION['mode_2'] = 'edit';
                                 $this->view_login_logout->display($_SESSION['mode_3']);
-                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($_GET['choosed']));
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($_GET['choosed']), NULL);
                             }
                             break;
                         }
@@ -259,13 +260,13 @@
                             $this->view_login_logout->display($_SESSION['mode_3']);
                             // check previous view and reload
                             if (end($_SESSION['lastview']) == 'showall') {
-                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), NULL);
                             } else {
                                 $lastSearchTerms_array; 
                                 foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
                                     $lastSearchTerms_array[] = $lastSearchTerms;
                                 }
-                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), NULL);
                             }
                             break;
                         }
@@ -275,19 +276,19 @@
                             $this->view_login_logout->display($_SESSION['mode_3']);
                             // check previous view and reload
                             if (end($_SESSION['lastview']) == 'showall') {
-                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), NULL);
                             } else {
                                 $lastSearchTerms_array; 
                                 foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
                                     $lastSearchTerms_array[] = $lastSearchTerms;
                                 }
-                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), NULL);
                             }
                             break;
                         }
                         // default rendering actions
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($_GET['choosed']));
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->filterDatasetID($_GET['choosed']), NULL);
                         break;
                     }
                     
@@ -309,13 +310,13 @@
                         $this->view_login_logout->display($_SESSION['mode_3']);
                         // check previous view and reload 
                         if (end($_SESSION['lastview']) == 'showall') {
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), $this->model_home->messageFromDb);
                         } else {
                             $lastSearchTerms_array; 
                             foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
                                 $lastSearchTerms_array[] = $lastSearchTerms;
                             }
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), $this->model_home->messageFromDb);
                         }
                        break;
                     }
@@ -328,13 +329,13 @@
                         $this->view_login_logout->display($_SESSION['mode_3']);
                         // check previous view and reload 
                         if (end($_SESSION['lastview']) == 'showall') {
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), $this->model_home->messageFromDb);
                         } else {
                             $lastSearchTerms_array; 
                             foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
                                 $lastSearchTerms_array[] = $lastSearchTerms;
                             }
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), $this->model_home->messageFromDb);
                         }
                         break;
                     }
@@ -346,13 +347,13 @@
                         $this->view_login_logout->display($_SESSION['mode_3']);
                         // check previous view and reload 
                         if (end($_SESSION['lastview']) == 'showall') {
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets());
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), NULL);
                         } else {
                             $lastSearchTerms_array; 
                             foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
                                 $lastSearchTerms_array[] = $lastSearchTerms;
                             }
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]));
+                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), NULL);
                         }
                         break;
                     }
@@ -361,6 +362,7 @@
                     else {
                         $_SESSION['mode_1'] = 'unlogged';
                         $_SESSION['mode_3'] = 'illegally_unlogged';
+                        unset($_SESSION);
                         $this->view_login_logout->display($_SESSION['mode_3'], NULL);
                     }
                 }

@@ -14,6 +14,7 @@
         private $db;
         private $db_username;
         private $db_password;
+        public  $messageFromDb;
 
         
         //**********************************************************************************
@@ -63,7 +64,7 @@
                                 '".$infos."')");
             
             $this->db = NULL;
-            
+            $this->messageFromDb = "Der Datensatz wurde gespeichert";
         }
         
         //**********************************************************************************
@@ -87,6 +88,7 @@
                                 infos = '".$infos."' WHERE id = ".$id);
             
             $this->db = NULL;
+            $this->messageFromDb = "Der Datensatz wurde gespeichert";
         }
 
         //**********************************************************************************
@@ -105,6 +107,11 @@
                 $this->db->query  ("DELETE FROM contacts WHERE id = ".$id);
             }
             $this->db = NULL;
+            if (count($ids) == 1) {
+                $this->messageFromDb = "Der Datensatz wurde gelöscht";
+            } else {
+                 $this->messageFromDb = "Die Datensätze wurden gelöscht";
+            }
         }
         
         //**********************************************************************************

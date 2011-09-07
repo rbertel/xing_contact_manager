@@ -18,8 +18,10 @@
                         <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
                         <link rel='stylesheet' type='text/css' href='View/View.css'/>
                         <link rel='stylesheet' type='text/css' href='JQuery/jquery-ui.css'/>
+                        <link rel='stylesheet' type='text/css' href='JQuery/fixheadtable/css/base.css'/>
                         <script src='JQuery/jquery.min.js'></script>
                         <script src='JQuery/jquery-ui.min.js'></script>
+                        <script type='text/javascript' src='JQuery/fixheadtable/javascript/jquery.fixheadertable.js'></script>
                     </head>
                     <body>";
             
@@ -80,7 +82,7 @@
             echo   "<div class='header'><!--BEGIN div class 'header'-->
                         <span class='headline'>
                         <font size='7' style='font-family:Helvetica'>
-                            XING KONTAKTMANAGER
+                            <font color='darkslategray'><b>XING </b></font>KONTAKTMANAGER
                         </font>
                         </span>";
         }
@@ -92,7 +94,7 @@
             echo
                 "<span class='logFormular'>
                     <form method='GET'>
-                    <table>
+                    <table style='margin-left:366px; margin-top:12px'>
                         <tr>
                             <td><font size='2'>Username:</font></td><td><input class='log' name='username' value='name'></td>
                         </tr>
