@@ -84,6 +84,7 @@
                         $_SESSION['mode_3'] = 'logged';
                         array_push($_SESSION['lastview'], 'showall');
                         $this->view_login_logout->display($_SESSION['mode_3']);
+                        //include ('View/showall.php');
                         $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), NULL);
                         break;
                     }
@@ -94,7 +95,7 @@
                         $_SESSION['mode_3'] = 'logged';
                         array_push($_SESSION['lastview'], array($_GET['searchterm_name'],$_GET['searchterm_job'],$_GET['searchterm_status']));
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($_GET['searchterm_name'],$_GET['searchterm_job'],$_GET['searchterm_status']), NULL);
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($_GET['searchterm_name'],$_GET['searchterm_job'],$_GET['searchterm_status']), $this->model_home->messageFromDb);
                         break;
                     }
                     

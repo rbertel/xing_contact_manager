@@ -6,6 +6,8 @@
     */
     class View_Login_Logout {
         
+        //******************************************************************************************
+        
         /*
           renders the scenarios
         */
@@ -28,71 +30,81 @@
             switch ($mode_3) {
                 // login denied, renders login formular with alert
                 case 'login_denied':
-                    self::displayHeadline();
+                    self::renderHeadline();
                     echo 
                         "<script type='text/javascript'>
                              alert('Ihr Login war leider nicht erfolgreich, bitte versuchen Sie es nochmal.');
                          </script>";
-                    self::displayLoginFormular();
+                    self::renderLoginFormular();
                     echo "</body>
                          </html>";
                     break;
                 // login permitted, renders logout Button
                 case 'logged':
-                    self::displayHeadline();
-                    self::displayLogoutFormular();
+                    self::renderHeadline();
+                    self::renderLogoutFormular();
                     break;                    
                 case 'legally_unlogged':
                     // secure logout, renders login formular with alert
-                    self::displayHeadline();
+                    self::renderHeadline();
                     echo 
                        "<script type='text/javascript'>
                             alert('Sie haben sich erfolgreich ausgeloggt, auf Wiedersehen.');
                         </script>";
-                    self::displayLoginFormular();
+                    self::renderLoginFormular();
                     echo "</body>
                         </html>";
                     break;
                 case 'illegally_unlogged':
                     // unsecure handle, renders login formular with alert
-                    self::displayHeadline();
+                    self::renderHeadline();
                     echo 
                        "<script type='text/javascript'>
                             alert('Sie wurden durch eine unsichere Handlung [z.B. Aufruf einer alten Seite dieser Applikation] ausgeloggt. Bitte loggen Sie sich neu ein, Danke.');
                         </script>";
-                    self::displayLoginFormular();
+                    self::renderLoginFormular();
                     echo "</body>
                         </html>";
                     break;
                 default:
                     // default, for example 1st page visit
-                    self::displayHeadline();    
-                    self::displayLoginFormular();
+                    self::renderHeadline();    
+                    self::renderLoginFormular();
                     echo "</body>
                         </html>";
                     break;
             }
         }
         
+        //******************************************************************************************
+        
         /*
+         
+         function renderHeadline()
          renders headline and meta information
+         
         */
-        public function displayHeadline(){
+        public function renderHeadline() {
 
             echo   "<div class='header'><!--BEGIN div class 'header'-->
-                        <span class='headline'>
+                        <div class='headline'>
                         <font size='7' style='font-family:Helvetica'>
                             <font color='darkslategray'><b>XING </b></font>KONTAKTMANAGER
                         </font>
-                        </span>";
+                        </div>";
         }
         
+        //******************************************************************************************
+        
         /*
+         
+         function renderLoginFormular()
          login formular
+         
         */
-        public function displayLoginFormular(){
+        public function renderLoginFormular() {
             echo
-                "<span class='logFormular'>
+                "<div class='loginFormular'>
                     <form method='GET'>
                     <table style='margin-left:366px; margin-top:12px'>
                         <tr>
@@ -106,19 +118,26 @@
                         </tr>
                     </table>
                     </form>
-                </span>";
+                </div>
+                </div><!--END div class 'header'-->"; // 2nd "</div>" --> end class "header" "
         }
         
-                /*
+        //******************************************************************************************
+        
+        /*
+         
+         function renderLogoutFormular()
          logout formular
+         
         */
-        public function displayLogoutFormular(){
+        public function renderLogoutFormular() {
             echo 
-               "<span class='logFormular'>
+               "<div class='logoutFormular'>
                     <form method='GET'>
                         <input class='logoutButton' type='submit' name='logout' value='Ausloggen'>
                     </form>
-                </span>";
+                </div>
+                </div><!--END div class 'header'-->"; // 2nd "</div>" --> end class "header" 
         }
         
         

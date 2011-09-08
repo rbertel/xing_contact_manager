@@ -1,18 +1,57 @@
-table.mytable {font-size: 12; font-family: helvetica; width:1400px; background:black}
-table.edittable { font-size: 12; font-family: helvetica; width:1400px; text-align: right; margin-top: 10px}
+/* body */
+
+body {font-family:helvetica}
+
+/* header / headline section containers */
+
+div.header {background:palegreen; top:0; height:100px; max-width:1400px}
+div.headline {background:green; float:left; height:50px; width:600px;  margin-left:2; border-bottom: 1px solid}
+div.loginFormular {background:red;  float:right; width:200px; }
+div.logoutFormular {background:red; float:right; width:100px; height:30px; text-align:right}
+
+div.menu {background:goldenrod; max-width:1400px; height: 30px; margin-top:60px}
+div.menu1 {background:orange; float:left; width:330px; height: 25px; text-align: left}
+div.menu2 {background:darkorange; float:right; width:630px; height: 25px; text-align: right}
+
+div.message {background:yellow; top:160; left:8; height:20px; max-width:1400px; border-bottom:1px solid}
+
+/* table section containers */
+
+div.actionTableCont{background: #FFFFFF; max-width:1400px; height:600px; overflow:auto}
+div.actionForm {background:turquoise; margin-top:10px; max-width:1400px; height:40px; }
+div.arrow {float: left; background: #BBBBBB; margin-top:10px; margin-left:12px;}
+div.actionFormLeft {float: left; margin-top:8px; width:300px; text-align: left }
+div.actionFormRight {float: right; margin-top:8px; width:250px; text-align: right}
+
+/* menu 1 inputs for insert / showall */
+
+input.menu {font-size:12px; width:160px}
+
+/* menu 2 inputs for search */
+
+select.search {font-size:12px; width:120px;}
+input.searchterm_name {font-size:12px}
+input.searchbutton {font-size:12px}
+
+/* all table attributes */
+
+table.mytable {font-size: 12; font-family: helvetica; width:98%; background:black}
+table.edittable { font-size: 12; font-family: helvetica; width:1400px; background:black; text-align: right;}
 td.mycell {padding-left:5; padding-right:5; height: 26}
 td.delcell {background: #D2D2D0; text-align:left;}
 td.default{background: #D2D2D0; padding-left:5; padding-right:5; height: 26}
 td.lastrow{background: #D2D2D0; padding-left:5; padding-right:5; height: 34}
 td.normal_white{background: #eeeeee; padding-left:5; padding-right:5; height: 26}
 td.normal_grey{background: #FFFFFF; padding-left:5; padding-right:5; height: 26}
-td.newData{background: #873549; padding-left:5; padding-right:5; height: 26}}
+td.newData{background: #873549; padding-left:5; padding-right:5; height: 26}
 th.default {background: #D2D2D0; padding-left:5; padding-right:5}
 td.editinsertLeftAlign {background: #D2D2D0; padding-left:5; text-align:left}
-td.editinsertRightAlign {background: #D2D2D0; text-align:right}
+td.editinsertRightAlign {background: #D2D2D0; padding-right:5; text-align:right}
 th.default {background: #D2D2D0; padding-left:5; padding-right:5}
 td.login{text-align:right}
-select.search{width:120px;}
+
+
+
 select.action{font-size:12px;}
 input.log {font-size:12px;}
 input.actionButton {font-size:12px;}
@@ -20,22 +59,9 @@ input.actionButton1 {font-size:10px;}
 input.editButton {font-size:10px; height:20px; width:60px}
 input.delButton {font-size:0px; height:18px; width:18px}
 input.backButton {font-size:10px; margin-left:5px}
-input.menu {width:200px}
-input.logoutButton {position: absolute; top: 8px; right: 0px; font-size:10px}
-textarea.infos {height:200px; width:100%}
 
-div.header {position:fixed; top:0; background:white; height:160px; width:1400px}
-span.headline {height:50px; width:1400px; text-align: left; margin-left:2; background:#eeeeee}
-span.logFormular {background:red; margin-left:20px; width:200px; text-align: right}
-div.menu {width:1400px; height: 30px; margin-top:60px}
-span.menu1 {float:left; width:420px; text-align: left}
-span.menu2 {width:700px; margin-left:20px; text-align: right}
-div.message {top:160; left:8; position:fixed; background:white; height:20px; width:1400px}
 
-div.actionTableCont{background: #FFFFFF; width:1400px; text-align: left; margin-top: 180px; overflow:auto}
-div.actionForm {margin-top:10px }
-div.arrow {float: left; background: #BBBBBB; margin-top:10px; margin-left:12px;}
-div.actionFormLeft {float: left; margin-top:8px; width:300px; text-align: left }
-div.actionFormRight {float: right; margin-top:8px; width:250px; text-align: right}
+input.logoutButton {top: 8px; right: 0px; font-size:10px}
+input.xing_input {width: 400px}
+textarea.infos {height:200px; width:206px}
 
-body {font-family:helvetica}

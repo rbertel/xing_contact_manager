@@ -143,8 +143,9 @@
                 );
                 $i++;    
             }
-           $this->db = NULL;
-           return $all_entries;
+            $this->db = NULL;
+            $this->messageFromDb = 'Alle '.count($all_entries).' Einträge:';
+            return $all_entries;
         }
         
         //**********************************************************************************
@@ -154,16 +155,20 @@
         params $terms (name / firstname), $job, $status --> all searchterms!
         */
         public function searchDataset($terms, $job, $status) {
-            
+  
+            //variable for save searchterms ($job, $status) for message to user
+            $searchterms_js = NULL;
             // variable for searchresults
             $searchresults = NULL;
             
             // if terms is empty search only for job / status
-            if ($terms == NULL) {
+            if ($terms == "") {
                 foreach(self::getDatasets() as $actual_dataset) {
                     // 4 cases = 4 kind ofs search
                     // job and status are not empty
                     if (($job != "") and ($status  != "")) {
+                        // save searchterms for message to user
+                        $searchterms_js = array ($job, $status);
                         if (($job == $actual_dataset['job']) and
                            (stristr($actual_dataset['status'], $status) != FALSE)) {
                             $searchresults[] = $actual_dataset;       
@@ -171,23 +176,28 @@
                     }
                     // job is empty / status is not empty
                     elseif (($job == "") and ($status  != "")) {
+                        // save searchterms for message to user
+                        $searchterms_js = array ($status);
                         if (stristr($actual_dataset['status'], $status) != FALSE) {
                             $searchresults[] = $actual_dataset;
-                            
                         }
                     }
                     // job is not empty / status is empty
                     elseif (($job != "") and ($status  == "")) {
+                        // save searchterms for message to user
+                        $searchterms_js = array ($job);
                         if ($job == $actual_dataset['job']) {
                             $searchresults[] = $actual_dataset;
                         }
                     }
                      // job and status are empty
                     elseif (($job == "") and ($status  == "")) {
+                        $this->messageFromDb = 'Sie haben keine Suchbegriffe ausgewählt';
                         return $searchresults;
                     }
                 }
-                $this->view = $searchresults;
+                // message to user
+                $this->messageFromDb = 'Ihre Suche nach "'.implode(", ", $searchterms_js).'" lieferte '.count($searchresults).' Treffer';
                 return $searchresults;
             }
             
@@ -195,11 +205,13 @@
             $terms = trim($terms);
 
             // if terms is emtpy after trimming search only for job / status
-            if ($terms == "") {
+            if (is_null($terms) or $terms == "") {
                 foreach(self::getDatasets() as $actual_dataset) {
                     // 4 cases = 4 kind ofs search
                     // job and status are not empty
                     if (($job != "") and ($status  != "")) {
+                        // save searchterms for message to user
+                        $searchterms_js = array ($job, $status);
                         if (($job == $actual_dataset['job']) and
                            (stristr($actual_dataset['status'], $status) != FALSE)) {
                             $searchresults[] = $actual_dataset;       
@@ -207,6 +219,8 @@
                     }
                     // job is emtpy / status is not empty
                     elseif (($job == "") and ($status  != "")) {
+                        // save searchterms for message to user
+                        $searchterms_js = array ($status);
                         if (stristr($actual_dataset['status'], $status) != FALSE) {
                             $searchresults[] = $actual_dataset;
                             
@@ -214,16 +228,20 @@
                     }
                     // job is not emtpy / status is empty
                     elseif (($job != "") and ($status  == "")) {
+                        // save searchterms for message to user
+                        $searchterms_js = array ($job);
                         if ($job == $actual_dataset['job']) {
                             $searchresults[] = $actual_dataset;
                         }
                     }
                      // job and status are empty
                     elseif (($job == "") and ($status  == "")) {
+                        $this->messageFromDb = 'Sie haben keine Suchbegriffe ausgewählt';
                         return $searchresults;
                     }
                 }
-                $this->view = $searchresults;
+                // message to user
+                $this->messageFromDb = 'Ihre Suche nach "'.implode(", ", $searchterms_js).'" lieferte '.count($searchresults).' Treffer';
                 return $searchresults;
             } 
             
@@ -233,16 +251,20 @@
             // variable for checkin existence of term in dataset
             $term_exists;
             
+            //echo $terms;
+            
             // search in datasets for terms
             foreach(self::getDatasets() as $actual_dataset) {
                 foreach ($term_array as $term) {
                      // 4 cases = 4 kind ofs search
                      // job and status are not empty
                     if (($job != "") and ($status  != "")) {
-                        if ((self::termToLower($term) == self::termToLower($actual_dataset['firstname'])) or
-                            (self::termToLower($term) == self::termToLower($actual_dataset['name'])) and
-                            ($job == $actual_dataset['job']) and
-                            (stristr($actual_dataset['status'], $status) != FALSE)) {
+                        // save searchterms for message to user
+                        $searchterms_js = array($job, $status);
+                        if (((self::termToLower($term) == self::termToLower($actual_dataset['firstname'])) or
+                             (self::termToLower($term) == self::termToLower($actual_dataset['name']))) and
+                             ($job == $actual_dataset['job']) and
+                             (stristr($actual_dataset['status'], $status) != FALSE) ) {
                             $term_exists = TRUE;
                         } else {
                             $term_exists = FALSE;
@@ -251,8 +273,10 @@
                     }
                     // job is emtpy / status is not empty
                     elseif (($job == "") and ($status  != "")) {
-                        if ((self::termToLower($term) == self::termToLower($actual_dataset['firstname'])) or
-                            (self::termToLower($term) == self::termToLower($actual_dataset['name'])) and
+                        // save searchterms for message to user
+                        $searchterms_js = array($status);
+                        if (((self::termToLower($term) == self::termToLower($actual_dataset['firstname'])) or
+                            (self::termToLower($term) == self::termToLower($actual_dataset['name']))) and
                             (stristr($actual_dataset['status'], $status) != FALSE)) {
                             $term_exists = TRUE;
                         } else {
@@ -262,8 +286,10 @@
                     }
                     // job is not emtpy / status is empty
                     elseif (($job != "") and ($status  == "")) {
-                        if ((self::termToLower($term) == self::termToLower($actual_dataset['firstname'])) or
-                            (self::termToLower($term) == self::termToLower($actual_dataset['name'])) and
+                        // save searchterms for message to user
+                        $searchterms_js = array($job);
+                        if (((self::termToLower($term) == self::termToLower($actual_dataset['firstname'])) or
+                            (self::termToLower($term) == self::termToLower($actual_dataset['name']))) and
                             ($job == $actual_dataset['job'])) {
                             $term_exists = TRUE;
                         } else {
@@ -273,8 +299,10 @@
                     }
                     // job and status are empty
                     elseif (($job == "") and ($status  == "")) {
-                        if ((self::termToLower($term) == self::termToLower($actual_dataset['firstname'])) or
-                            (self::termToLower($term) == self::termToLower($actual_dataset['name']))) {
+                        // save searchterms for message to user
+                        $searchterms_js = array("");
+                        if (((self::termToLower($term) == self::termToLower($actual_dataset['firstname'])) or
+                            (self::termToLower($term) == self::termToLower($actual_dataset['name'])))) {
                             $term_exists = TRUE;
                         } else {
                             $term_exists = FALSE;
@@ -286,7 +314,12 @@
                     $searchresults[] = $actual_dataset;
                 }
             }
-            $this->view = $searchresults;
+            // 2 kind of messages to user
+            if ($searchterms_js == NULL) { // if no job or status is searched
+                $this->messageFromDb = 'Ihre Suche nach "'.implode(", ", $term_array).'" lieferte '.count($searchresults).' Treffer';
+            } else {
+                $this->messageFromDb = 'Ihre Suche nach "'.implode(", ", $term_array).', '.implode(", ", $searchterms_js).'" lieferte '.count($searchresults).' Treffer';
+            }
             return $searchresults;
         }
         

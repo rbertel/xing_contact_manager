@@ -4,7 +4,11 @@
         
         //******************************************************************************************
         
-        /* renders the output, param: mode_2 -> status what have to render (all datasets, one ...)
+        /*
+         
+          function display()
+          renders the output, param: mode_2 -> status what have to render (all datasets, one ...)
+        
         */
         public function display($mode_2, $data, $messageFromDb) {
             
@@ -37,19 +41,27 @@
                 case 'show':
                     // create html
                     self::renderMenu();
-                    // if no data is there to show, render little info and break
+                    // if no data is there to show -->
                     if ($data == NULL) {
-                        echo "<div class='message'><font size='2' color='red'><b>! </b>Kein Datensatz gefunden, bitte erneut versuchen</font></div>";
-                        self::renderTableHeader();
-                        echo "</body></html>";
+                        if ($messageFromDb == NULL) {
+                            echo "<div class='message'><font size='1' color='white'>_</font></div>";
+                            self::renderTableHeader();
+                            echo "</body></html>";
+                            break;
+                        } else {
+                            echo "<div class='message'><font size='2' color='red'><b>! </b>".$messageFromDb."</font></div>";
+                            self::renderTableHeader();
+                            echo "</body></html>";
+                            break; 
+                        }
+                    } elseif ($messageFromDb == NULL) {
+                        echo "<div class='message'><font size='1' color='white'>_</font></div>";
+                        self::renderShowTable($data);
                         break;
-                    }
-                    // else echo dummy
-                    else {
-                        echo "<div class='message'><font size='1' color='white'>_</font></div>";  
-                    }
+                    } 
+                    echo "<div class='message'><font size='2' color='red'><b>! </b>".$messageFromDb."</font></div>";
                     self::renderShowTable($data);
-                    break; // end 'show'
+                    break; // end 'show'                    
                 case 'edit':
                     // create html
                     self::renderMenu();
@@ -126,7 +138,7 @@
                     break; // end export
                 default:
                     self::renderMenu();
-                    echo "<div class='message'><font color='white' size='1'>_</font></div>";
+                    echo "<div class='message'><font color='white' size='1'>_</div>";
                     self::renderTableHeader();
                     echo "</body></html>";
             } // end switch
@@ -138,7 +150,7 @@
         
         // THE RENDER METHODS
         
-        //**************************************************************************************
+        //******************************************************************************************
         //******************************************************************************************
         //******************************************************************************************
         
@@ -147,15 +159,15 @@
         
         /*
          
-        renderShowTable()
+        function renderShowTable()
         renders the swowtable with content
-        expect the data
+        expects the data
         
         */    
         public function renderShowTable($data) {
             // render tableheader
-            echo   "<div class='actionTableCont'>
-                        <form method='GET'>
+            echo   " <form method='GET'>
+                        <div class='actionTableCont'>
                             <table class='mytable' cellspacing='1'>
                                 <th class='default'>X</th>
                                 <th class='default'>ID</th>
@@ -237,18 +249,22 @@
             }
             echo        "<td class='lastrow' colspan='12'>Alle auswählen</td>";
             echo
-                "</table>
-                 <div class='arrow'><img src='eckpfeil.gif'></div>
-                 <div class='actionFormLeft'>
-                     <select class='action' name='action'>
-                         <option></option>
-                         <option>Bearbeiten</option>
-                         <option>Entfernen</option>
-                         <option>CSV Export</option>
-                     </select>
-                     <input type='submit' class='actionButton' name='editdelete' value='Go'>
-                 </div></form></div>
-             </body>
+                   "</table>
+                    </div>
+                    <div class='actionForm'>
+                        <div class='arrow'><img src='eckpfeil.gif'></div>
+                        <div class='actionFormLeft'>
+                            <select class='action' name='action'>
+                                <option></option>
+                                <option>Bearbeiten</option>
+                                <option>Entfernen</option>
+                                <option>CSV Export</option>
+                            </select>
+                            <input type='submit' class='actionButton' name='editdelete' value='Go'>
+                        </div>
+                    </div>
+                </form> <!-- END table formular -->
+            </body>
          </html>";
         }
         
@@ -256,9 +272,9 @@
         
         /*
          
-        renderDeleteTable()
+        function renderDeleteTable()
         renders the swowtable with content
-        expect the data
+        expects the data
         
         */    
         public function renderDeleteTable($data) {
@@ -342,7 +358,8 @@
         
         /*
          
-        renderEditTable()
+        function renderEditTable()
+        expects the data
         
         */    
         public function renderEditTable($data) {
@@ -351,7 +368,7 @@
             foreach($data as $actual_dataset) {
                 $keys = array_keys($actual_dataset);
                 $key = 0;
-                echo "<div class='actionTableCont'><table class='edittable'>";
+                echo "<div class='actionTableCont'><table class='edittable' cellspacing='1'>";
                 echo "<form method='GET'>";
                 foreach ($actual_dataset as $oneentry) {
                     // switch different input cases generally
@@ -360,6 +377,10 @@
                     switch ($keys[$key]) {
                         case 'id':
                             echo "<td class='editinsertLeftAlign'><input name='".$keys[$key]."' value='".$oneentry."' readonly='readonly'></td>";
+                            $key++;
+                            break;
+                        case 'xing_profile':
+                            echo "<td class='editinsertLeftAlign'><input class='xing_input' name='".$keys[$key]."' value='".$oneentry."'></td>";
                             $key++;
                             break;
                         case 'job':
@@ -454,11 +475,15 @@
         
         //******************************************************************************************
         
-        // renders the Insert Table        
+        /*
+         
+          function renderInsertTable()
+          renders the Insert Table        
         
+        */
         public function renderInsertTable() {
             echo
-            "<div class='actionTableCont'><table class='edittable'>
+            "<div class='actionTableCont'><table class='edittable' cellspacing='1'>
                 <form method='GET'>
                     <tr>
                         <td class='editinsertRightAlign'>VORNAME</td>
@@ -497,7 +522,7 @@
                     </tr>
                     <tr>
                         <td class='editinsertRightAlign'>XING PROFIL</td>
-                        <td class='editinsertLeftAlign'><input id='xing_profile' name='xing_profile'></td>
+                        <td class='editinsertLeftAlign'><input class='xing_input' id='xing_profile' name='xing_profile'></td>
                     </tr>
                      <tr>
                         <td class='editinsertRightAlign'>ERSTER KONTAKT AM</td>
@@ -528,15 +553,20 @@
                 </table></div>";
         }
         
-                //******************************************************************************************
+        //******************************************************************************************
         
-        // renders the Insert Table        
+        /*
+          
+          function renderValidateTable()
+          renders the Validate Table
+          expects the data
         
+        */
         public function renderValidateTable($data) {
             // render tableheader
             echo   "<form method='GET'>
-                        <div class='actionTableCont' cellspacing='1'>
-                            <table class='mytable'>
+                        <div class='actionTableCont'>
+                            <table class='mytable' cellspacing='1'>
                                 <th class='default'>X</th>
                                 <th class='default'>ID</th>
                                 <th class='default'>VORNAME</th>
@@ -626,19 +656,24 @@
         
         //******************************************************************************************
         
-        // renders the main menu
+        /*
+          
+          function renderMenu()
+          renders the main menu
+          
+        */
         public function renderMenu() {
             echo
                        "<div class='menu'><!--BEGIN div class 'menu'-->
-                        <span class='menu1'>
+                        <div class='menu1'>
                             <form method='GET'>
                             <input class='menu' type='submit' name='insert' value='Datensatz erstellen'>
                             <input class='menu' type='submit' name='showall' value='Alle Datensätze anzeigen'>
                             </form>
-                        </span>
-                        <span class='menu2'>
+                        </div>
+                        <div class='menu2'>
                         <form method='GET'>
-                            <font size='2'>Name: </font><input name='searchterm_name'>
+                            <font size='2'>Name: </font><input class='searchterm_name' name='searchterm_name'>
                             <font size='2'>Tätigkeit: </font><select class='search' name='searchterm_job' size='1'>
                                 <option></option>
                                 <option>undefined</option>
@@ -661,15 +696,21 @@
                                 <option>TERMIN</option>
                                 <option>POOL</option>
                             </select>
-                            <input type='submit' name='search' value='Suchen'><br>
+                            <input class='searchbutton' type='submit' name='search' value='Suchen'><br>
                         </form>
-                        </span>
-                        </div><!--END div class 'menu'-->
-                        </div><!--END div class 'header'-->"; // 2nd "</div>" --> end class "header"  
+                        </div>
+                        </div><!--END div class 'menu'-->";
+ 
         }
         
          //*****************************************************************************************
-                // renders ONLY the table header
+        
+        /*
+          
+          function renderTableHeader()
+          renders ONLY the table header
+        
+        */
         public function renderTableHeader() {
             echo "<div class='actionTableCont'><table class='mytable' cellspacing='1'>
                 <th class='default'>X</th>
@@ -688,7 +729,13 @@
         
         //******************************************************************************************
         
-        // translate english terms into german
+        /*
+          
+          function translate()
+          translate some special english terms into german
+          expects the english term
+        
+        */
         public function translate($term) {
             switch ($term) {
                 case 'id':
