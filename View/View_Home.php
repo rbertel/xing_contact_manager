@@ -23,7 +23,7 @@
                         });
                         $(document).ready(function() 
                         { 
-                            $('#tableToSort').tablesorter(); 
+                            $('#tableToSort').tablesorter();
                         });
                         
                         function checkedall() {
@@ -35,7 +35,7 @@
                                 }
                             }
                         }
-                    </script>";
+            </script>";
             // render different outputs
             switch ($mode_2) {
                 case 'show':
@@ -114,6 +114,12 @@
                 case 'saved':
                     // create html
                     self::renderMenu();
+                    if ($data == NULL) {
+                        echo "<div class='message'><font size='2' color='red'><b>! </b>".$messageFromDb."</font></div>";
+                        self::renderTableHeader();
+                        echo "</body></html>";
+                        break;
+                    }
                     echo "<div class='message'><font size='2' color='red'><b>! </b>".$messageFromDb."</font></div>";
                     self::renderShowTable($data);
                     break; // end saved
@@ -166,21 +172,22 @@
         */    
         public function renderShowTable($data) {
             // render tableheader
-            echo   " <form method='GET'>
-                        <div class='actionTableCont'>
-                            <table class='mytable' cellspacing='1'>
-                                <th class='default'>X</th>
-                                <th class='default'>ID</th>
-                                <th class='default'>VORNAME</th>
-                                <th class='default'>NAME</th>
-                                <th class='default'>TÄTIGKEIT</th>
-                                <th class='default'>STATUS</th>
-                                <th class='default'>XING PROFIL</th>
-                                <th class='default'>ERSTER KONTAKT AM</th>
-                                <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
-                                <th class='default'>ERSTER KONTAKT ÜBER MA</th>
-                                <th class='default'>LETZTES UPDATE</th>
-                                <th class='default'>INFOS</th>";
+            echo   "<div id='id_hardTableCont' class='hardTableCont' style='height:600px'>
+                        <form method='GET'>
+                            <div id='id_flexibleTableCont' class='flexibleTableCont'>
+                                <table id='mytable' class='mytable' cellspacing='1'>
+                                    <th class='default'>X</th>
+                                    <th class='default'>ID</th>
+                                    <th class='default'>VORNAME</th>
+                                    <th class='default'>NAME</th>
+                                    <th class='default'>TÄTIGKEIT</th>
+                                    <th class='default'>STATUS</th>
+                                    <th class='default'>XING PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT AM</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER MA</th>
+                                    <th class='default'>LETZTES UPDATE</th>
+                                    <th class='default'>INFOS</th>";
             // background of tablerow
             $row_background = "normal_white"; 
             // iterate trough data and print on screen
@@ -218,10 +225,10 @@
                                     echo "<td class='mycell' bgcolor='plum'>".$oneentry."</td>";
                                     break;
                                 case 'FORWARDED':
-                                    echo "<td class='mycell' bgcolor='yellow'>".$oneentry."</td>";
+                                    echo "<td class='mycell' bgcolor='#FF6'>".$oneentry."</td>";
                                     break;
                                 case 'POOL':
-                                    echo "<td class='mycell' bgcolor='cyan'>".$oneentry."</td>";
+                                    echo "<td class='mycell' bgcolor='aqua'>".$oneentry."</td>";
                                     break;
                                 case 'TERMIN':
                                     echo "<td class='mycell' bgcolor='greenyellow'>".$oneentry."</td>";
@@ -237,35 +244,47 @@
                 }
                 echo    "</tr>";
             }
-            echo    "<tr>";
-            echo   "<td class='lastrow'>
-                        <input id='checkall' type='checkbox' name='chooseAll' onclick='checkedall()'>
-                    </td>";
+            echo                   "<tr>";
+                echo                   "<td class='lastrow'>
+                                            <input id='checkall' type='checkbox' name='chooseAll' onclick='checkedall()'>
+                                        </td>";
            // alternate background of tablerow for last row 
             if ($row_background == "normal_white") {
                 $row_background = "normal_grey";
             } else {
                 $row_background = "normal_white";
             }
-            echo        "<td class='lastrow' colspan='12'>Alle auswählen</td>";
-            echo
-                   "</table>
-                    </div>
-                    <div class='actionForm'>
-                        <div class='arrow'><img src='eckpfeil.gif'></div>
-                        <div class='actionFormLeft'>
-                            <select class='action' name='action'>
-                                <option></option>
-                                <option>Bearbeiten</option>
-                                <option>Entfernen</option>
-                                <option>CSV Export</option>
-                            </select>
-                            <input type='submit' class='actionButton' name='editdelete' value='Go'>
-                        </div>
-                    </div>
-                </form> <!-- END table formular -->
-            </body>
-         </html>";
+            echo                   "<td class='lastrow' colspan='12'>Alle auswählen</td></tr>";
+            echo               "</table>
+                            </div> <!-- END flexibleTableCont div -->
+                            <div class='actionForm'>
+                                <div class='arrow'>
+                                    <img src='eckpfeil.gif'>
+                                </div>
+                                <div class='actionFormLeft'>
+                                    <select class='action' name='action'>
+                                        <option></option>
+                                        <option>Bearbeiten</option>
+                                        <option>Entfernen</option>
+                                        <option>CSV Export</option>
+                                    </select>
+                                    <input type='submit' class='actionButton' name='editdelete' value='Go'>
+                                </div>
+                            </div><!-- END actionForm div -->
+                        </form>
+                    </div><!-- END hardTableCont div -->
+                    <script type='text/javascript'>
+                        // MAKING PARENT DIV DEPEND FROM HIS CHILD TABLE  !!! :-)
+                        // if table height + 50px (for actionform) is bigger than hard container
+                        if (document.getElementById('mytable').offsetHeight >= parseInt(document.getElementById('id_hardTableCont').style.height)-50) {
+                            // flexible inner container height is 50px smaller than 
+                            document.getElementById('id_flexibleTableCont').style.height = (parseInt(document.getElementById('id_hardTableCont').style.height)-50)+'px'; 
+                        } else {
+                            document.getElementById('id_flexibleTableCont').style.height = document.getElementById('mytable').offsetHeight;
+                        }
+                    </script>
+                </body>
+            </html>";
         }
         
         //******************************************************************************************
@@ -279,20 +298,21 @@
         */    
         public function renderDeleteTable($data) {
             // render tableheader
-            echo "<form method='GET'>
-                    <div class='actionTableCont'>
-                        <table class='mytable' cellspacing='1'>
-                            <th class='default'>ID</th>
-                            <th class='default'>VORNAME</th>
-                            <th class='default'>NAME</th>
-                            <th class='default'>TÄTIGKEIT</th>
-                            <th class='default'>STATUS</th>
-                            <th class='default'>XING PROFIL</th>
-                            <th class='default'>ERSTER KONTAKT AM</th>
-                            <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
-                            <th class='default'>ERSTER KONTAKT ÜBER MA</th>
-                            <th class='default'>LETZTES UPDATE</th>
-                            <th class='default'>INFOS</th>";
+            echo   "<div id='id_hardTableCont' class='hardTableCont' style='height:600px'>
+                        <form method='GET'>
+                            <div id='id_flexibleTableCont' class='flexibleTableCont'>
+                                <table id='mytable' class='mytable' cellspacing='1'>
+                                    <th class='default'>ID</th>
+                                    <th class='default'>VORNAME</th>
+                                    <th class='default'>NAME</th>
+                                    <th class='default'>TÄTIGKEIT</th>
+                                    <th class='default'>STATUS</th>
+                                    <th class='default'>XING PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT AM</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER MA</th>
+                                    <th class='default'>LETZTES UPDATE</th>
+                                    <th class='default'>INFOS</th>";
             // background of tablerow
             $row_background = "normal_white";            
             // iterate trough data and print on screen
@@ -326,10 +346,10 @@
                                     echo "<td class='mycell' bgcolor='plum'>".$oneentry."</td>";
                                     break;
                                 case 'FORWARDED':
-                                    echo "<td class='mycell' bgcolor='yellow'>".$oneentry."</td>";
+                                    echo "<td class='mycell' bgcolor='#FF6'>".$oneentry."</td>";
                                     break;
                                 case 'POOL':
-                                    echo "<td class='mycell' bgcolor='cyan'>".$oneentry."</td>";
+                                    echo "<td class='mycell' bgcolor='aqua'>".$oneentry."</td>";
                                     break;
                                 case 'TERMIN':
                                     echo "<td class='mycell' bgcolor='greenyellow'>".$oneentry."</td>";
@@ -346,12 +366,27 @@
                 echo    "</tr>";
             }
             echo
-            "</table>
-                <div class='actionFormRight'>
-                    <input type='submit' class='actionButton' name='confirmDelIDNEU' value='Löschen'>
-                </div>
-            </div>
-            </form>";
+                               "</table>
+                            </div> <!-- END flexibleTableCont -->
+                            <div class='actionForm'>
+                                <div class='actionFormRight'>
+                                    <input type='submit' class='actionButton' name='confirmDelIDNEU' value='Löschen'>
+                                </div>
+                            </div>
+                        </form>
+                    </div> <!-- END hardTableCont -->
+                    <script type='text/javascript'>
+                        // MAKING PARENT DIV DEPEND FROM HIS CHILD TABLE  !!! :-)
+                        // if table height + 50px (for actionform) is bigger than hard container
+                        if (document.getElementById('mytable').offsetHeight >= parseInt(document.getElementById('id_hardTableCont').style.height)-50) {
+                            // flexible inner container height is 50px smaller than 
+                            document.getElementById('id_flexibleTableCont').style.height = (parseInt(document.getElementById('id_hardTableCont').style.height)-50)+'px'; 
+                        } else {
+                            document.getElementById('id_flexibleTableCont').style.height = document.getElementById('mytable').offsetHeight;
+                        }
+                    </script>
+                </body>
+            </html>";
         }
         
         //******************************************************************************************
@@ -564,21 +599,22 @@
         */
         public function renderValidateTable($data) {
             // render tableheader
-            echo   "<form method='GET'>
-                        <div class='actionTableCont'>
-                            <table class='mytable' cellspacing='1'>
-                                <th class='default'>X</th>
-                                <th class='default'>ID</th>
-                                <th class='default'>VORNAME</th>
-                                <th class='default'>NAME</th>
-                                <th class='default'>TÄTIGKEIT</th>
-                                <th class='default'>STATUS</th>
-                                <th class='default'>XING PROFIL</th>
-                                <th class='default'>ERSTER KONTAKT AM</th>
-                                <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
-                                <th class='default'>ERSTER KONTAKT ÜBER MA</th>
-                                <th class='default'>LETZTES UPDATE</th>
-                                <th class='default'>INFOS</th>";
+            echo   "<div id='id_hardTableCont' class='hardTableCont' style='height:600px'>
+                        <form method='GET'>
+                            <div id='id_flexibleTableCont' class='flexibleTableCont'>
+                                <table id='mytable' class='mytable' cellspacing='1'>
+                                    <th class='default'>X</th>
+                                    <th class='default'>ID</th>
+                                    <th class='default'>VORNAME</th>
+                                    <th class='default'>NAME</th>
+                                    <th class='default'>TÄTIGKEIT</th>
+                                    <th class='default'>STATUS</th>
+                                    <th class='default'>XING PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT AM</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
+                                    <th class='default'>ERSTER KONTAKT ÜBER MA</th>
+                                    <th class='default'>LETZTES UPDATE</th>
+                                    <th class='default'>INFOS</th>";
             // background of tablerow
              $row_background = "normal_white";    
             // iterate trough data and print on screen
@@ -622,10 +658,10 @@
                                     echo "<td class='mycell' bgcolor='plum'>".$oneentry."</td>";
                                     break;
                                 case 'FORWARDED':
-                                    echo "<td class='mycell' bgcolor='yellow'>".$oneentry."</td>";
+                                    echo "<td class='mycell' bgcolor='FF6'>".$oneentry."</td>";
                                     break;
                                 case 'POOL':
-                                    echo "<td class='mycell' bgcolor='cyan'>".$oneentry."</td>";
+                                    echo "<td class='mycell' bgcolor='aqua'>".$oneentry."</td>";
                                     break;
                                 case 'TERMIN':
                                     echo "<td class='mycell' bgcolor='greenyellow'>".$oneentry."</td>";
@@ -642,16 +678,33 @@
                 echo    "</tr>";
             }
             echo
-                       "</table>
-                            <div class='arrow'><img src='eckpfeil.gif'></div>
-                            <div class='actionFormLeft'>
-                                <input type='submit' class='actionButton' name='editdelete' value='Alten Datensatz Bearbeiten'>
-                            </div>
-                            <div class='actionFormRight'>
-                                <input type='submit' class='actionButton' name='confirmInsert' value='Neuen Datensatz Speichern'>
-                            </div></div></form>
-                    </body>
-                </html>"; 
+                               "</table>
+                            </div> <!-- END div flexibleTableCont -->
+                            <div class='actionForm'>
+                                <div class='arrow'>
+                                    <img src='eckpfeil.gif'>
+                                </div>
+                                <div class='actionFormLeft'>
+                                    <input type='submit' class='actionButton' name='editdelete' value='Alten Datensatz Bearbeiten'>
+                                </div>
+                                <div class='actionFormRight'>
+                                    <input type='submit' class='actionButton' name='confirmInsert' value='Neuen Datensatz Speichern'>
+                                </div>
+                            </div> <!-- END actionForm div -->
+                        </form> 
+                    </div> <!-- END div hardTableCont -->
+                    <script type='text/javascript'>
+                        // MAKING PARENT DIV DEPEND FROM HIS CHILD TABLE  !!! :-)
+                        // if table height + 50px (for actionform) is bigger than hard container
+                        if (document.getElementById('mytable').offsetHeight >= parseInt(document.getElementById('id_hardTableCont').style.height)-50) {
+                            // flexible inner container height is 50px smaller than 
+                            document.getElementById('id_flexibleTableCont').style.height = (parseInt(document.getElementById('id_hardTableCont').style.height)-50)+'px'; 
+                        } else {
+                            document.getElementById('id_flexibleTableCont').style.height = document.getElementById('mytable').offsetHeight;
+                        }
+                    </script>
+                </body>
+            </html>"; 
         }
         
         //******************************************************************************************
@@ -712,19 +765,34 @@
         
         */
         public function renderTableHeader() {
-            echo "<div class='actionTableCont'><table class='mytable' cellspacing='1'>
-                <th class='default'>X</th>
-                <th class='default'>ID</th>
-                <th class='default'>VORNAME</th>
-                <th class='default'>NAME</th>
-                <th class='default'>TÄTIGKEIT</th>
-                <th class='default'>STATUS</th>
-                <th class='default'>XING PROFIL</th>
-                <th class='default'>ERSTER KONTAKT AM</th>
-                <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
-                <th class='default'>ERSTER KONTAKT ÜBER MA</th>
-                <th class='default'>LETZTES UPDATE</th>
-                <th class='default'>INFOS</th></table></div>";  
+            echo   "<div id='id_hardTableCont' class='hardTableCont' style='height:600px'>
+                        <div id='id_flexibleTableCont' class='flexibleTableCont'>
+                            <table class='mytable' cellspacing='1'>
+                                <th class='default'>X</th>
+                                <th class='default'>ID</th>
+                                <th class='default'>VORNAME</th>
+                                <th class='default'>NAME</th>
+                                <th class='default'>TÄTIGKEIT</th>
+                                <th class='default'>STATUS</th>
+                                <th class='default'>XING PROFIL</th>
+                                <th class='default'>ERSTER KONTAKT AM</th>
+                                <th class='default'>ERSTER KONTAKT ÜBER PROFIL</th>
+                                <th class='default'>ERSTER KONTAKT ÜBER MA</th>
+                                <th class='default'>LETZTES UPDATE</th>
+                                <th class='default'>INFOS</th>
+                            </table>
+                        </div>
+                    </div>
+                    <script type='text/javascript'>
+                        // MAKING PARENT DIV DEPEND FROM HIS CHILD TABLE  !!! :-)
+                        // if table height + 50px (for actionform) is bigger than hard container
+                        if (document.getElementById('mytable').offsetHeight >= parseInt(document.getElementById('id_hardTableCont').style.height)-50) {
+                            // flexible inner container height is 50px smaller than 
+                            document.getElementById('id_flexibleTableCont').style.height = (parseInt(document.getElementById('id_hardTableCont').style.height)-50)+'px'; 
+                        } else {
+                            document.getElementById('id_flexibleTableCont').style.height = document.getElementById('mytable').offsetHeight;
+                        }
+                    </script>";  
         }
         
         //******************************************************************************************

@@ -27,7 +27,7 @@
             
             // general mode (new / logged / unlogged)
             if (!isset($_SESSION['mode_1'])) {
-                $_SESSION['mode_1'] = 'new';            
+                $_SESSION['mode_1'] = 'unlogged';            
             }
             // mode for rendering homepage (how to) /// describes last actual user action
             if (!isset($_SESSION['mode_2'])) {
@@ -74,7 +74,9 @@
                         $_SESSION['mode_1'] = 'unlogged';
                         $_SESSION['mode_3'] = 'legally_unlogged';
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        unset($_SESSION);
+                        $_SESSION['mode_1'] = 'unlogged';
+                        $_SESSION['mode_2'] = 'default';
+                        $_SESSION['mode_3'] = 'default';
                         break;
                     }
                     
@@ -84,7 +86,6 @@
                         $_SESSION['mode_3'] = 'logged';
                         array_push($_SESSION['lastview'], 'showall');
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        //include ('View/showall.php');
                         $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), NULL);
                         break;
                     }
@@ -93,8 +94,22 @@
                     if (isset($_GET['search'])) {
                         $_SESSION['mode_2'] = 'show';
                         $_SESSION['mode_3'] = 'logged';
-                        array_push($_SESSION['lastview'], array($_GET['searchterm_name'],$_GET['searchterm_job'],$_GET['searchterm_status']));
                         $this->view_login_logout->display($_SESSION['mode_3']);
+                        // if no searchterms are choosed
+                        if (($_GET['searchterm_name'] == "") and ($_GET['searchterm_job'] == "") and ($_GET['searchterm_status'] == "")) {
+                            // check previous view and reload 
+                            if (end($_SESSION['lastview']) == 'showall') {
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), "Sie haben keine Suchbegriffe ausgewählt");
+                            } else {
+                                $lastSearchTerms_array; 
+                                foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
+                                    $lastSearchTerms_array[] = $lastSearchTerms;
+                                }
+                                $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), "Sie haben keine Suchbegriffe ausgewählt");
+                            }
+                            break;
+                        }
+                        array_push($_SESSION['lastview'], array($_GET['searchterm_name'],$_GET['searchterm_job'],$_GET['searchterm_status']));
                         $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($_GET['searchterm_name'],$_GET['searchterm_job'],$_GET['searchterm_status']), $this->model_home->messageFromDb);
                         break;
                     }
@@ -132,7 +147,6 @@
                                                         $_GET['infos']);
                         // if the new contact isnt in database
                         if (!$this->model_home->existDuplicates($_GET['firstname'], $_GET['name'], $_GET['xing_profile'])) {
-                            $_SESSION['mode_2'] = 'saved';
                             $this->model_home->insertDataset($_GET['firstname'],
                                                              $_GET['name'],
                                                              $_GET['job'],
@@ -143,6 +157,7 @@
                                                              $_GET['first_contact_from'],
                                                              $_GET['last_update'],
                                                              $_GET['infos']);
+                            $_SESSION['mode_2'] = 'saved';
                         // if there are supposed duplicates in database
                         } else {
                             if (!is_null($this->model_home->getDuplicates())) {
@@ -159,16 +174,7 @@
                             
                         }
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        // check previous view and reload 
-                        if (end($_SESSION['lastview']) == 'showall') {
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), $this->model_home->messageFromDb);
-                        } else {
-                            $lastSearchTerms_array; 
-                            foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
-                                $lastSearchTerms_array[] = $lastSearchTerms;
-                            }
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), $this->model_home->messageFromDb);
-                        }
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->getLastDataset(), $this->model_home->messageFromDb);
                         break;
                     }
                     
@@ -188,19 +194,9 @@
                                                          $newData[7],
                                                          $newData[8],
                                                          $newData[9]);
-                        // check previous view and reload
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        if (end($_SESSION['lastview']) == 'showall') {
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), $this->model_home->messageFromDb);
-                        } else {
-                            $lastSearchTerms_array; 
-                            foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
-                                $lastSearchTerms_array[] = $lastSearchTerms;
-                            }
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), $this->model_home->messageFromDb);
-                        }
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->getLastDataset(), $this->model_home->messageFromDb);
                         break;
-                        
                     }
                   
                     // 10. User pressed EDITDELETE button (also for EXPORT)
@@ -309,17 +305,8 @@
                                                          $_GET['last_update'],
                                                          $_GET['infos']);
                         $this->view_login_logout->display($_SESSION['mode_3']);
-                        // check previous view and reload 
-                        if (end($_SESSION['lastview']) == 'showall') {
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->getDatasets(), $this->model_home->messageFromDb);
-                        } else {
-                            $lastSearchTerms_array; 
-                            foreach (end($_SESSION['lastview']) as $lastSearchTerms) {
-                                $lastSearchTerms_array[] = $lastSearchTerms;
-                            }
-                            $this->view_home->display($_SESSION['mode_2'], $this->model_home->searchDataset($lastSearchTerms_array[0], $lastSearchTerms_array[1], $lastSearchTerms_array[2]), $this->model_home->messageFromDb);
-                        }
-                       break;
+                        $this->view_home->display($_SESSION['mode_2'], $this->model_home->getLastDataset(), $this->model_home->messageFromDb);
+                        break;
                     }
                     
                     // 12. User pressed CONFIRM DELETE dataset button
@@ -362,8 +349,8 @@
                     // 14. User made anything else             
                     else {
                         $_SESSION['mode_1'] = 'unlogged';
+                        $_SESSION['mode_2'] = 'default';
                         $_SESSION['mode_3'] = 'illegally_unlogged';
-                        unset($_SESSION);
                         $this->view_login_logout->display($_SESSION['mode_3'], NULL);
                     }
                 }

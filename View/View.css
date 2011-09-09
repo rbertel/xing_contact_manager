@@ -1,26 +1,30 @@
 /* body */
 
-body {font-family:helvetica}
+body {font-family: Helvetica, Arial, sans-serif; background:#FFFFFF;}
 
 /* header / headline section containers */
 
-div.header {background:palegreen; top:0; height:100px; max-width:1400px}
-div.headline {background:green; float:left; height:50px; width:600px;  margin-left:2; border-bottom: 1px solid}
-div.loginFormular {background:red;  float:right; width:200px; }
-div.logoutFormular {background:red; float:right; width:100px; height:30px; text-align:right}
+div.header {background:#cccccc; top:0; height:100px; max-width:1400px; border:1px solid}
+div.headline {background:#cccccc; float:left; height:50px; width:600px;  margin-left:4}
+div.loginFormular {background:#cccccc;  float:right; width:232px; height:80px; text-align:right; margin-top:2; margin-right:2}
+div.logoutFormular {background:#cccccc; float:right; width:100px; height:30px; text-align:right; margin-top:2; margin-right:2}
 
-div.menu {background:goldenrod; max-width:1400px; height: 30px; margin-top:60px}
-div.menu1 {background:orange; float:left; width:330px; height: 25px; text-align: left}
-div.menu2 {background:darkorange; float:right; width:630px; height: 25px; text-align: right}
+div.menu {background:#FFFFFF; max-width:1400px; height: 30px; margin-top:60px}
+div.menu1 {background:#FFFFFF; float:left; width:330px; height: 25px; text-align: left}
+div.menu2 {background:#FFFFFF; float:right; width:630px; height: 25px; text-align: right}
 
-div.message {background:yellow; top:160; left:8; height:20px; max-width:1400px; border-bottom:1px solid}
+div.message {background:#FFFFFF; top:160; left:8; height:20px; max-width:1400px}
 
 /* table section containers */
 
-div.actionTableCont{background: #FFFFFF; max-width:1400px; height:600px; overflow:auto}
-div.actionForm {background:turquoise; margin-top:10px; max-width:1400px; height:40px; }
-div.arrow {float: left; background: #BBBBBB; margin-top:10px; margin-left:12px;}
-div.actionFormLeft {float: left; margin-top:8px; width:300px; text-align: left }
+div.hardTableCont{background: #FFFFFF; max-width:1400px; top:0}
+div.flexibleTableCont{background:black; max-width:1400px; height:20px; overflow:auto; border:1px solid}
+
+
+div.actionTableCont{background: #FFFFFF; max-width:1400px; height:600px}
+div.actionForm {background:#FFFFFF; max-width:1400px; height:50px; }
+div.arrow {float: left; background: #FFFFFF; margin-top:10px; margin-left:12px;}
+div.actionFormLeft {float: left; margin-top:10px; width:300px; text-align: left }
 div.actionFormRight {float: right; margin-top:8px; width:250px; text-align: right}
 
 /* menu 1 inputs for insert / showall */
@@ -35,14 +39,14 @@ input.searchbutton {font-size:12px}
 
 /* all table attributes */
 
-table.mytable {font-size: 12; font-family: helvetica; width:98%; background:black}
+table.mytable {font-size: 12; font-family: helvetica; width:100%; }
 table.edittable { font-size: 12; font-family: helvetica; width:1400px; background:black; text-align: right;}
 td.mycell {padding-left:5; padding-right:5; height: 26}
 td.delcell {background: #D2D2D0; text-align:left;}
 td.default{background: #D2D2D0; padding-left:5; padding-right:5; height: 26}
 td.lastrow{background: #D2D2D0; padding-left:5; padding-right:5; height: 34}
-td.normal_white{background: #eeeeee; padding-left:5; padding-right:5; height: 26}
-td.normal_grey{background: #FFFFFF; padding-left:5; padding-right:5; height: 26}
+td.normal_white{background: #ffffff; padding-left:5; padding-right:5; height: 26}
+td.normal_grey{background: #eeeeee; padding-left:5; padding-right:5; height: 26}
 td.newData{background: #873549; padding-left:5; padding-right:5; height: 26}
 th.default {background: #D2D2D0; padding-left:5; padding-right:5}
 td.editinsertLeftAlign {background: #D2D2D0; padding-left:5; text-align:left}
@@ -53,7 +57,7 @@ td.login{text-align:right}
 
 
 select.action{font-size:12px;}
-input.log {font-size:12px;}
+input.log {font-size:12px }
 input.actionButton {font-size:12px;}
 input.actionButton1 {font-size:10px;}
 input.editButton {font-size:10px; height:20px; width:60px}

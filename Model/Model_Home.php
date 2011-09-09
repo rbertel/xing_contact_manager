@@ -149,6 +149,38 @@
         }
         
         //**********************************************************************************
+        
+        /*
+          gets the last dataset in 
+        */ 
+        public function getLastDataset() {
+            
+            // connect DB
+            self::connectDB();
+                        
+            // fill $entries with all datasets
+            $i = 0;
+            foreach ($this->db->query("SELECT * FROM contacts ORDER BY id DESC LIMIT 1") as $entry) {
+                $all_entries[$i] = array (
+                    'id' => $entry['id'],
+                    'firstname' => $entry['firstname'],
+                    'name' => $entry['name'],
+                    'job' => $entry['job'],
+                    'status' => $entry['status'],
+                    'xing_profile' => $entry['xing_profile'],
+                    'first_contact_at' => $entry['first_contact_at'],
+                    'first_contact_over_profile' => $entry['first_contact_over_profile'],
+                    'first_contact_from' => $entry['first_contact_from'],
+                    'last_update' => $entry['last_update'],
+                    'infos' => $entry['infos']
+                );
+                $i++;    
+            }
+            $this->db = NULL;
+            return $all_entries;
+        }
+        
+        //**********************************************************************************
                
         /*
         search for dataset
@@ -190,11 +222,6 @@
                             $searchresults[] = $actual_dataset;
                         }
                     }
-                     // job and status are empty
-                    elseif (($job == "") and ($status  == "")) {
-                        $this->messageFromDb = 'Sie haben keine Suchbegriffe ausgewählt';
-                        return $searchresults;
-                    }
                 }
                 // message to user
                 $this->messageFromDb = 'Ihre Suche nach "'.implode(", ", $searchterms_js).'" lieferte '.count($searchresults).' Treffer';
@@ -233,11 +260,6 @@
                         if ($job == $actual_dataset['job']) {
                             $searchresults[] = $actual_dataset;
                         }
-                    }
-                     // job and status are empty
-                    elseif (($job == "") and ($status  == "")) {
-                        $this->messageFromDb = 'Sie haben keine Suchbegriffe ausgewählt';
-                        return $searchresults;
                     }
                 }
                 // message to user

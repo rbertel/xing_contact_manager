@@ -89,7 +89,7 @@
             echo   "<div class='header'><!--BEGIN div class 'header'-->
                         <div class='headline'>
                         <font size='7' style='font-family:Helvetica'>
-                            <font color='darkslategray'><b>XING </b></font>KONTAKTMANAGER
+                            <font color='darkslategray'><b>XING </b></font><font color='black'>KONTAKTMANAGER</font>
                         </font>
                         </div>";
         }
@@ -106,7 +106,7 @@
             echo
                 "<div class='loginFormular'>
                     <form method='GET'>
-                    <table style='margin-left:366px; margin-top:12px'>
+                    <table>
                         <tr>
                             <td><font size='2'>Username:</font></td><td><input class='log' name='username' value='name'></td>
                         </tr>
