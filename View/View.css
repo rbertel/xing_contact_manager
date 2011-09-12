@@ -4,23 +4,25 @@ body {font-family: Helvetica, Arial, sans-serif; background:#FFFFFF;}
 
 /* header / headline section containers */
 
-div.header {background:#cccccc; top:0; height:100px; max-width:1400px; border:1px solid}
-div.headline {background:#cccccc; float:left; height:50px; width:600px;  margin-left:4}
-div.loginFormular {background:#cccccc;  float:right; width:232px; height:80px; text-align:right; margin-top:2; margin-right:2}
-div.logoutFormular {background:#cccccc; float:right; width:100px; height:30px; text-align:right; margin-top:2; margin-right:2}
+div.upperMargin1 {background:darkslategrey; height:8px; max-width:1400px; margin-top:0}
+div.upperMargin2 {background:lightslategrey; height:2px; max-width:1400px; margin-top:0}
+div.header {background:#ffffff; top:0; height:100px; max-width:1400px; border-bottom:1px solid}
+div.headline {background:#ffffff; float:left; height:50px; width:600px;  margin-left:4}
+div.loginFormular {background:#ffffff;  float:right; width:232px; height:80px; text-align:right; margin-top:6; margin-right:2}
+div.logoutFormular {background:#ffffff; float:right; width:100px; height:30px; text-align:right; margin-top:6; margin-right:2}
+
+div.message {margin-top:10; left:8; height:20px; max-width:1400px}
+div.messageLeft {float: left; height:100%; width:50%; text-align: left}
+div.messageRight {float: right; height:100%; width:50%; text-align: right}
 
 div.menu {background:#FFFFFF; max-width:1400px; height: 30px; margin-top:60px}
 div.menu1 {background:#FFFFFF; float:left; width:330px; height: 25px; text-align: left}
 div.menu2 {background:#FFFFFF; float:right; width:630px; height: 25px; text-align: right}
 
-div.message {background:#FFFFFF; top:160; left:8; height:20px; max-width:1400px}
-
 /* table section containers */
 
-div.hardTableCont{background: #FFFFFF; max-width:1400px; top:0}
+div.hardTableCont{background: #FFFFFF; max-width:1400px; margin-top:10}
 div.flexibleTableCont{background:black; max-width:1400px; height:20px; overflow:auto; border:1px solid}
-
-
 div.actionTableCont{background: #FFFFFF; max-width:1400px; height:600px}
 div.actionForm {background:#FFFFFF; max-width:1400px; height:50px; }
 div.arrow {float: left; background: #FFFFFF; margin-top:10px; margin-left:12px;}
@@ -33,30 +35,34 @@ input.menu {font-size:12px; width:160px}
 
 /* menu 2 inputs for search */
 
-select.search {font-size:12px; width:120px;}
+select.search {font-size:12px; width:100px;}
 input.searchterm_name {font-size:12px}
 input.searchbutton {font-size:12px}
 
 /* all table attributes */
 
 table.mytable {font-size: 12; font-family: helvetica; width:100%; }
-table.edittable { font-size: 12; font-family: helvetica; width:1400px; background:black; text-align: right;}
+table.edittable { font-size: 12; font-family: helvetica; width:1400px; background:black; text-align: right; margin-top:10}
 td.mycell {padding-left:5; padding-right:5; height: 26}
 td.delcell {background: #D2D2D0; text-align:left;}
 td.default{background: #D2D2D0; padding-left:5; padding-right:5; height: 26}
 td.lastrow{background: #D2D2D0; padding-left:5; padding-right:5; height: 34}
-td.normal_white{background: #ffffff; padding-left:5; padding-right:5; height: 26}
-td.normal_grey{background: #eeeeee; padding-left:5; padding-right:5; height: 26}
+td.normal_white{background: #ececec; padding-left:5; padding-right:5; height: 26}
+td.normal_grey{background: #f9f9f9; padding-left:5; padding-right:5; height: 26}
 td.newData{background: #873549; padding-left:5; padding-right:5; height: 26}
 th.default {background: #D2D2D0; padding-left:5; padding-right:5}
-td.editinsertLeftAlign {background: #D2D2D0; padding-left:5; text-align:left}
-td.editinsertRightAlign {background: #D2D2D0; padding-right:5; text-align:right}
+th.black {background: #444444; padding-left:5; padding-right:5}
+td.editinsertLeftAlign {background: #ececec; padding-left:5; text-align:left}
+td.editinsertRightAlign {background: #ececec; padding-right:5; text-align:right}
 th.default {background: #D2D2D0; padding-left:5; padding-right:5}
 td.login{text-align:right}
 
 
 
 select.action{font-size:12px;}
+select.editInsert{font-size:12px; width: 200px} 
+input.inputDefault {font-size:12px; width:200px}
+input.xing_input {width: 400px; font-size:12px;}
 input.log {font-size:12px }
 input.actionButton {font-size:12px;}
 input.actionButton1 {font-size:10px;}
@@ -64,8 +70,7 @@ input.editButton {font-size:10px; height:20px; width:60px}
 input.delButton {font-size:0px; height:18px; width:18px}
 input.backButton {font-size:10px; margin-left:5px}
 
-
 input.logoutButton {top: 8px; right: 0px; font-size:10px}
-input.xing_input {width: 400px}
-textarea.infos {height:200px; width:206px}
+
+textarea.infos {height:200px; width:200px}
 

@@ -48,9 +48,6 @@
                     // secure logout, renders login formular with alert
                     self::renderHeadline();
                     echo 
-                       "<script type='text/javascript'>
-                            alert('Sie haben sich erfolgreich ausgeloggt, auf Wiedersehen.');
-                        </script>";
                     self::renderLoginFormular();
                     echo "</body>
                         </html>";
@@ -86,10 +83,14 @@
         */
         public function renderHeadline() {
 
-            echo   "<div class='header'><!--BEGIN div class 'header'-->
+            echo   "<div class='upperMargin1'>
+                    </div>
+                    <div class='upperMargin2'>
+                    </div>
+                    <div class='header'><!--BEGIN div class 'header'-->
                         <div class='headline'>
-                        <font size='7' style='font-family:Helvetica'>
-                            <font color='darkslategray'><b>XING </b></font><font color='black'>KONTAKTMANAGER</font>
+                        <font size='6' style='font-family:Helvetica'>
+                            <font color='darkslategrey'><b>XING </b></font><font color='black'>KONTAKTMANAGER</font>
                         </font>
                         </div>";
         }
