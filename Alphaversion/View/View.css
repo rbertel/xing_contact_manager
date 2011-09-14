@@ -1,0 +1,82 @@
+/* body */
+
+body {font-family: Helvetica, Arial, sans-serif; background:#FFFFFF;}
+
+/* header / headline section containers */
+
+div.upperMargin1 {background:black; height:4px; max-width:1400px; margin-top:0}
+div.upperMargin2 {background:#D2D2D0; height:2px; max-width:1400px; margin-top:0}
+div.header {background:#ececec; top:0; height:100px; max-width:1400px; border-bottom:1px solid}
+div.headline {background:#ececec; float:left; height:50px; width:700px;  margin-left:4}
+div.loginFormular {background:#ececec;  float:right; width:232px; height:80px; text-align:right; margin-top:6; margin-right:2}
+div.logoutFormular {background:#ececec; float:right; width:100px; height:30px; text-align:right; margin-top:2; margin-right:0}
+div.message {background:#ffffff; margin-top:5; left:8; height:20px; max-width:1400px}
+div.messageLeft {background:#ffffff; float: left; height:20; width:80%; text-align: left; margin-top:5; margin-left:5px}
+div.messageRight {background:#ffffff; float: right; height:20; width:10%; text-align: right; margin-top:0; margin-right:5px}
+
+div.menu {background:#f9f9f9; max-width:1400px; height: 100px; margin-top:0px}
+div.menuLeft            {background:#f9f9f9; float:left; width:350px; height: 50px; text-align: left; margin-top:20px; margin-left:5px}
+div.menuLeftLeftUp      {background:#f9f9f9; float:left; width:350px; height: 25px; text-align: left; margin-top:0px; margin-left:0px}
+div.menuLeftLeftBottom  {background:#f9f9f9; float:left; width:350px; height: 25px; text-align: left; margin-top:0px; margin-left:0px}
+div.menuRight           {background:#f9f9f9; float:right; width:604px; height: 50px; text-align: right; margin-top:20px; margin-right:5px}
+div.menuRightLeftUp     {background:#f9f9f9; float:right; width:604px; height: 25px; text-align: left; margin-top:0px; margin-left:0px}
+div.menuRightLeftBottom {background:#f9f9f9; float:right; width:604px; height: 25px; text-align: left; margin-top:0px; margin-left:0px}
+div.menuback {background:#f9f9f9; float:left; width:400px; height: 25px; text-align: left; margin-top:10px; margin-left:5px}
+
+/* table section containers */
+
+div.hardTableCont{background: #FFFFFF; max-width:1400px; margin-top:10}
+div.flexibleTableCont{background:black; max-width:1400px; height:52px; overflow:auto; border:1px solid}
+div.actionTableCont{background: #FFFFFF; max-width:1400px; margin-top:10}
+div.actionForm {background:#FFFFFF; max-width:1400px; height:50px; }
+div.arrow {float: left; background: #FFFFFF; margin-top:10px; margin-left:12px;}
+div.actionFormLeft {float: left; margin-top:10px; width:300px; text-align: left }
+div.actionFormRight {float: right; margin-top:8px; width:250px; text-align: right}
+
+/* menu 1 inputs for insert / showall */
+
+input.menu {font-size:12px; width:160px}
+input.filter {font-size:12px}
+
+/* menu 2 inputs for search */
+
+select.search {font-size:12px; width:100px;}
+input.filter_name {font-size:12px; width:100px;}
+input.searchbutton {font-size:12px}
+
+/* all table attributes */
+
+table.mytable {font-size: 12; font-family: helvetica; width:100%; }
+table.edittable { font-size: 12; font-family: helvetica; width:1400px; background:black; text-align: right}
+td.mycell {padding-left:5; padding-right:5; height: 40}
+td.delcell {background: #D2D2D0; text-align:left;}
+td.default{background: #D2D2D0; padding-left:5; padding-right:5; height: 40}
+td.lastrow{background: #D2D2D0; padding-left:5; padding-right:5; height: 34}
+td.normal_white{background: #ececec; padding-left:5; padding-right:5; height: 40}
+td.normal_grey{background: #f9f9f9; padding-left:5; padding-right:5; height: 40}
+td.newData{background: #873549; padding-left:5; padding-right:5; height: 40}
+td.newDataIcon{background: #873549; padding-left:10; padding-right:5; height: 40}
+td.newDataRed{background: red; padding-left:5; padding-right:5; height: 40}
+th.default {background: #D2D2D0; padding-left:5; padding-right:5}
+th.editable {background: #D2D2D0; width:30; padding-left:5; padding-right:5}
+th.black {background: #444444; padding-left:5; padding-right:5}
+td.editinsertLeftAlign {background: #ececec; padding-left:5; text-align:left}
+td.editinsertRightAlign {background: #ececec; padding-right:5; text-align:right}
+th.default {background: #D2D2D0; padding-left:5; padding-right:5; height: 50}
+td.login{text-align:right}
+
+select.action{font-size:12px;}
+select.editInsert{font-size:12px; width: 200px} 
+input.inputDefault {font-size:12px; width:200px}
+input.xing_input {width: 400px; font-size:12px;}
+input.log {font-size:12px }
+input.actionButton {font-size:12px;}
+input.actionButton1 {font-size:10px;}
+input.editButton {font-size:10px; height:20px; width:60px}
+input.delButton {font-size:0px; height:18px; width:18px}
+input.backButton {font-size:10px; margin-left:5px}
+
+input.logoutButton {top: 8px; right: 0px; font-size:10px}
+
+textarea.infos {height:200px; width:200px}
+
